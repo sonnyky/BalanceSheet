@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Balance Sheet</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="imageMic">image of mic</string>
+</resources>
