@@ -22,4 +22,15 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
+    compile files('libs/gdata-base-1.0.jar')
+    compile files('libs/gdata-client-1.0.jar')
+    compile files('libs/gdata-client-meta-1.0.jar')
+    compile files('libs/gdata-core-1.0.jar')
+    compile files('libs/gdata-spreadsheet-3.0.jar')
+    compile files('libs/gdata-spreadsheet-meta-3.0.jar')
+    compile files('libs/google-http-client-jackson2-1.20.0.jar')
+    compile files('libs/google.api-client-1.20.0.jar')
+    compile 'com.google.android.gms:play-services-identity:7.5.0'
+    compile files('libs/jsr305.jar')
+    compile files('libs/javax.mail.jar')
 }
