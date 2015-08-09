@@ -21,8 +21,13 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.gbase.client.FeedURLFactory;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
+import com.google.gdata.data.spreadsheet.CellEntry;
+import com.google.gdata.data.spreadsheet.CellFeed;
 import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
 import com.google.gdata.data.spreadsheet.SpreadsheetFeed;
+import com.google.gdata.data.spreadsheet.Worksheet;
+import com.google.gdata.data.spreadsheet.WorksheetEntry;
+import com.google.gdata.data.spreadsheet.WorksheetFeed;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
 
@@ -31,6 +36,8 @@ import com.google.gdata.util.ServiceException;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import java.util.Arrays;
@@ -89,6 +96,7 @@ public class MainActivity extends FragmentActivity {
 
     private class SpreadSheetIntegration extends AsyncTask<String, Integer, String> {
         final String accountName = AccountManager.KEY_ACCOUNT_NAME;
+        final String sheetName = "Ausgaben";
         @Override
         protected  String doInBackground(String...params){
             long totalSize=0;
@@ -140,8 +148,41 @@ public class MainActivity extends FragmentActivity {
 
                 // Iterate through all of the spreadsheets returned
                 for (SpreadsheetEntry spreadsheet : spreadsheets) {
-                    // Print the title of this spreadsheet to the screen
-                    System.err.println(spreadsheet.getTitle().getPlainText());
+                    //check to find a specific sheet name
+                    if(spreadsheet.getTitle().getPlainText().equals(sheetName)) {
+                        // Print the title of this spreadsheet to the screen
+                        System.err.println(spreadsheet.getTitle().getPlainText());
+
+                        //Get the first worksheet in the spreadsheet which we found
+                        WorksheetFeed worksheetFeed = service.getFeed(spreadsheet.getWorksheetFeedUrl(), WorksheetFeed.class);
+                        List<WorksheetEntry> worksheets = worksheetFeed.getEntries();
+                        WorksheetEntry worksheet = worksheets.get(0);
+
+                        try {
+                            URL cellFeedUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=2&min-col=4&max-col=4").toURL();
+                            CellFeed cellFeed = service.getFeed(cellFeedUrl, CellFeed.class);
+
+                            // Iterate through each cell, printing its value.
+                            for (CellEntry cell : cellFeed.getEntries()) {
+                                // Print the cell's address in A1 notation
+                                System.out.print(cell.getTitle().getPlainText() + "\t");
+                                // Print the cell's address in R1C1 notation
+                                System.out.print(cell.getId().substring(cell.getId().lastIndexOf('/') + 1) + "\t");
+                                // Print the cell's formula or text value
+                                System.out.print(cell.getCell().getInputValue() + "\t");
+                                // Print the cell's calculated value if the cell's value is numeric
+                                // Prints empty string if cell's value is not numeric
+                                System.out.print(cell.getCell().getNumericValue() + "\t");
+                                // Print the cell's displayed value (useful if the cell has a formula)
+                                System.out.println(cell.getCell().getValue() + "\t");
+                            }
+                        }catch (URISyntaxException us_exc){
+                            System.out.println("Exception");
+                        }
+
+
+                    }
+
                 }
 
             } catch (AuthenticationException e) {
