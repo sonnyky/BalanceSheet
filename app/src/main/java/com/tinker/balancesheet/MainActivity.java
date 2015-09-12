@@ -11,6 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 
@@ -21,8 +26,13 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.gbase.client.FeedURLFactory;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
+import com.google.gdata.data.spreadsheet.CellEntry;
+import com.google.gdata.data.spreadsheet.CellFeed;
 import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
 import com.google.gdata.data.spreadsheet.SpreadsheetFeed;
+import com.google.gdata.data.spreadsheet.Worksheet;
+import com.google.gdata.data.spreadsheet.WorksheetEntry;
+import com.google.gdata.data.spreadsheet.WorksheetFeed;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
 
@@ -31,8 +41,11 @@ import com.google.gdata.util.ServiceException;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +55,8 @@ public class MainActivity extends FragmentActivity {
     ViewPager mViewPager;
     SpreadSheetIntegration spread_sheet;
     private static final int REQ_SIGN_IN_REQUIRED = 55664;
-
+    LineChart chart;
+    CellData[] cell_data;
 
     private ImageButton btnSpeak;
     @Override
@@ -50,6 +64,8 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
+        chart = (LineChart) findViewById(R.id.chart);
+
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
@@ -59,11 +75,7 @@ public class MainActivity extends FragmentActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         new SpreadSheetIntegration().execute();
-
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,6 +101,9 @@ public class MainActivity extends FragmentActivity {
 
     private class SpreadSheetIntegration extends AsyncTask<String, Integer, String> {
         final String accountName = AccountManager.KEY_ACCOUNT_NAME;
+        final String sheetName = "Ausgaben";
+        float temp_float_number=0.0f;
+        int data_counter=0;
         @Override
         protected  String doInBackground(String...params){
             long totalSize=0;
@@ -140,8 +155,72 @@ public class MainActivity extends FragmentActivity {
 
                 // Iterate through all of the spreadsheets returned
                 for (SpreadsheetEntry spreadsheet : spreadsheets) {
-                    // Print the title of this spreadsheet to the screen
-                    System.err.println(spreadsheet.getTitle().getPlainText());
+
+                    //check to find a specific sheet name, if we find it, do stuff
+                    if(spreadsheet.getTitle().getPlainText().equals(sheetName)) {
+
+                        // Print the title of this spreadsheet to the screen
+                        System.err.println(spreadsheet.getTitle().getPlainText());
+
+                        //Get the first worksheet in the spreadsheet which we found
+                        WorksheetFeed worksheetFeed = service.getFeed(spreadsheet.getWorksheetFeedUrl(), WorksheetFeed.class);
+                        List<WorksheetEntry> worksheets = worksheetFeed.getEntries();
+                        WorksheetEntry worksheet = worksheets.get(0);
+
+                        try {
+                            URL cellFeedUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=4&min-col=3&max-col=3").toURL();
+                            CellFeed cellFeed = service.getFeed(cellFeedUrl, CellFeed.class);
+
+                            cell_data = new CellData[cellFeed.getTotalResults()];
+                            ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
+                            ArrayList<String> xVals = new ArrayList<String>();
+
+                            // Iterate through each cell, printing its value.
+                            for (CellEntry cell : cellFeed.getEntries()) {
+                                temp_float_number = (float)(cell.getCell().getDoubleValue());
+                                valsComp1.add(new Entry(temp_float_number, data_counter));
+
+                                xVals.add(String.valueOf(data_counter));
+
+
+                                data_counter++;
+                                // Print the cell's address in A1 notation
+                                System.out.print(cell.getTitle().getPlainText() + "\t");
+                                // Print the cell's address in R1C1 notation
+                                System.out.print(cell.getId().substring(cell.getId().lastIndexOf('/') + 1) + "\t");
+                                // Print the cell's formula or text value
+                                System.out.print(cell.getCell().getInputValue() + "\t");
+                                // Print the cell's calculated value if the cell's value is numeric
+                                // Prints empty string if cell's value is not numeric
+                                System.out.print(cell.getCell().getNumericValue() + "\t");
+                                // Print the cell's displayed value (useful if the cell has a formula)
+                                System.out.println(cell.getCell().getValue() + "\t");
+                            }
+
+                            LineDataSet setComp1 = new LineDataSet(valsComp1, "Axis title");
+                            setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
+
+                            ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+                            dataSets.add(setComp1);
+
+                            final LineData line_data = new LineData(xVals, dataSets);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    chart.setData(line_data);
+                                    chart.invalidate();
+                                }
+                            });
+
+
+                        }catch (URISyntaxException us_exc){
+                            System.out.println("Exception");
+                        }
+
+
+                    }
+
                 }
 
             } catch (AuthenticationException e) {
