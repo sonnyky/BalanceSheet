@@ -9,7 +9,9 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -54,6 +56,7 @@ public class MainActivity extends FragmentActivity {
     SectionsPagerManager mSectionsPagerAdapter;
     ViewPager mViewPager;
     SpreadSheetIntegration spread_sheet;
+    private ProgressBar spinner;
     private static final int REQ_SIGN_IN_REQUIRED = 55664;
     LineChart chart;
     CellData[] cell_data;
@@ -64,8 +67,11 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
-        chart = (LineChart) findViewById(R.id.chart);
+        spinner = (ProgressBar)findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
 
+        chart = (LineChart) findViewById(R.id.chart);
+        chart.getAxisRight().setEnabled(false);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
@@ -95,7 +101,6 @@ public class MainActivity extends FragmentActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -169,32 +174,38 @@ public class MainActivity extends FragmentActivity {
 
                         try {
                             URL cellFeedUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=4&min-col=3&max-col=3").toURL();
+                            URL axisLabelUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=4&min-col=1&max-col=1").toURL();
                             CellFeed cellFeed = service.getFeed(cellFeedUrl, CellFeed.class);
+                            CellFeed axisLabelFeed = service.getFeed(axisLabelUrl, CellFeed.class);
 
                             cell_data = new CellData[cellFeed.getTotalResults()];
                             ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
                             ArrayList<String> xVals = new ArrayList<String>();
+
+                            for(CellEntry label_data : axisLabelFeed.getEntries()){
+                                xVals.add(String.valueOf(label_data.getCell().getValue()));
+                            }
+
 
                             // Iterate through each cell, printing its value.
                             for (CellEntry cell : cellFeed.getEntries()) {
                                 temp_float_number = (float)(cell.getCell().getDoubleValue());
                                 valsComp1.add(new Entry(temp_float_number, data_counter));
 
-                                xVals.add(String.valueOf(data_counter));
-
+                               // xVals.add(String.valueOf(data_counter));
 
                                 data_counter++;
                                 // Print the cell's address in A1 notation
-                                System.out.print(cell.getTitle().getPlainText() + "\t");
+                                //System.out.print(cell.getTitle().getPlainText() + "\t");
                                 // Print the cell's address in R1C1 notation
-                                System.out.print(cell.getId().substring(cell.getId().lastIndexOf('/') + 1) + "\t");
+                                //System.out.print(cell.getId().substring(cell.getId().lastIndexOf('/') + 1) + "\t");
                                 // Print the cell's formula or text value
-                                System.out.print(cell.getCell().getInputValue() + "\t");
+                                //System.out.print(cell.getCell().getInputValue() + "\t");
                                 // Print the cell's calculated value if the cell's value is numeric
                                 // Prints empty string if cell's value is not numeric
-                                System.out.print(cell.getCell().getNumericValue() + "\t");
+                                //System.out.print(cell.getCell().getNumericValue() + "\t");
                                 // Print the cell's displayed value (useful if the cell has a formula)
-                                System.out.println(cell.getCell().getValue() + "\t");
+                                //System.out.println(cell.getCell().getValue() + "\t");
                             }
 
                             LineDataSet setComp1 = new LineDataSet(valsComp1, "Axis title");
@@ -243,6 +254,8 @@ public class MainActivity extends FragmentActivity {
         protected void onPostExecute(String aLong) {
             super.onPostExecute(aLong);
             System.out.println("Finished");
+            spinner.setVisibility(View.GONE);
+
         }
     }
 
