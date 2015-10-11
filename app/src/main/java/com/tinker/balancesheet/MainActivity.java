@@ -1,6 +1,7 @@
 package com.tinker.balancesheet;
 
 import android.accounts.AccountManager;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.YAxis;
@@ -66,20 +68,33 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Button to input by voice
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
+        btnSpeak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //btnSpeak.setBackgroundColor(0xFF908F7B);
+                Toast.makeText(getApplicationContext(), "Please input number", Toast.LENGTH_LONG).show();
+                //btnSpeak.setBackgroundColor(0xFF5f6960);
+            }
+        });
+
+        //This is the spinner to indicate data loading
         spinner = (ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.VISIBLE);
 
+        //Enable chart layout and setup chart settings
         chart = (LineChart) findViewById(R.id.chart);
         chart.getAxisRight().setEnabled(false);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
-        mSectionsPagerAdapter = new SectionsPagerManager(getSupportFragmentManager());
+        //mSectionsPagerAdapter = new SectionsPagerManager(getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter. comment out for now
+        // mViewPager = (ViewPager) findViewById(R.id.pager);
+        // mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
         new SpreadSheetIntegration().execute();
     }
 
