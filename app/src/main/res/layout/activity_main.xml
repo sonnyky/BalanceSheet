@@ -1,7 +1,11 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
@@ -11,37 +15,64 @@
         android:id="@+id/btnSpeak"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
+        android:background="@drawable/button_state"
         android:src="@drawable/mic"
-        android:contentDescription="@string/imageMic" />
-
+        android:contentDescription="@string/imageMic"
+        android:clickable="true"
+        android:backgroundTintMode="src_in"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/textDisplay"
+        android:layout_alignEnd="@+id/textDisplay"
+        android:layout_marginBottom="15dp"
+        style="@style/Base.Widget.AppCompat.Button"
+        />
+<!--
     <fragment
         android:id="@+id/listFragment"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:name="com.tinker.balancesheet.OneFragment"
         android:layout_below="@+id/btnSpeak"
         tools:layout="@layout/one_fragment" />
-
-    <TextView android:text="@string/hello_world"
+-->
+    <TextView android:text="@string/home_title_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textDisplay"
-        android:layout_below="@+id/listFragment" />
-
+        android:layout_below="@+id/btnSpeak"
+        android:layout_marginBottom="15dp" />
+<!--
     <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="150dp"
         tools:context=".MainActivity"
         android:layout_below="@+id/textDisplay" />
-
+-->
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="200dp"
+        android:layout_below="@+id/textDisplay"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:progressDrawable="@drawable/circular_progress_bar"
 
+        android:layout_alignTop="@+id/chart"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="62dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
+</ScrollView>
