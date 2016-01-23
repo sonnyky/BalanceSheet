@@ -17,10 +17,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.LargeValueFormatter;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 
@@ -53,7 +55,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+/*
+* Using MPAndroidChart. Home page : https://github.com/PhilJay/MPAndroidChart
+* */
 
 public class GraphActivity extends FragmentActivity {
     SectionsPagerManager mSectionsPagerAdapter;
@@ -62,6 +66,8 @@ public class GraphActivity extends FragmentActivity {
     private ProgressBar spinner;
     private static final int REQ_SIGN_IN_REQUIRED = 55664;
     LineChart chart;
+    YAxis yAxis;
+    XAxis xAxis;
     CellData[] cell_data;
 
     String account_selected_by_user;
@@ -92,6 +98,9 @@ public class GraphActivity extends FragmentActivity {
         //Enable chart layout and setup chart settings
         chart = (LineChart) findViewById(R.id.chart);
         chart.getAxisRight().setEnabled(false);
+        yAxis = chart.getAxisLeft();
+        yAxis.setValueFormatter(new LargeValueFormatter());
+        yAxis.setAxisMinValue(3000000);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
@@ -234,7 +243,7 @@ public class GraphActivity extends FragmentActivity {
                                 //System.out.println(cell.getCell().getValue() + "\t");
                             }
 
-                            LineDataSet setComp1 = new LineDataSet(valsComp1, "Axis title");
+                            LineDataSet setComp1 = new LineDataSet(valsComp1, "Monthly");
                             setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
 
                             ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
