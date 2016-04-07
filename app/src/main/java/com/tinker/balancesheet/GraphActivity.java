@@ -42,9 +42,6 @@ import com.google.gdata.data.spreadsheet.WorksheetEntry;
 import com.google.gdata.data.spreadsheet.WorksheetFeed;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
-
-
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -73,13 +70,15 @@ public class GraphActivity extends FragmentActivity {
     String account_selected_by_user;
 
     private ImageButton btnSpeak;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
+
+        //The account present in the user's device and selected will be passed here by the MainActivity class
         account_selected_by_user = intent.getStringExtra("account_selected");
-        Toast.makeText(getApplicationContext(), "We got this account :" + account_selected_by_user, Toast.LENGTH_LONG).show();
         //Button to input by voice
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
         btnSpeak.setOnClickListener(new View.OnClickListener() {
@@ -95,12 +94,7 @@ public class GraphActivity extends FragmentActivity {
         spinner = (ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.VISIBLE);
 
-        //Enable chart layout and setup chart settings
-        chart = (LineChart) findViewById(R.id.chart);
-        chart.getAxisRight().setEnabled(false);
-        yAxis = chart.getAxisLeft();
-        yAxis.setValueFormatter(new LargeValueFormatter());
-        yAxis.setAxisMinValue(3000000);
+        ChartSettings();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the app.
@@ -115,7 +109,6 @@ public class GraphActivity extends FragmentActivity {
     protected void onStart() {
         super.onStart();
         new SpreadSheetIntegration().execute();
-
     }
 
     @Override
@@ -127,6 +120,7 @@ public class GraphActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //TODO : add menu to change chart settings
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -141,24 +135,11 @@ public class GraphActivity extends FragmentActivity {
 
     private class SpreadSheetIntegration extends AsyncTask<String, Integer, String> {
         final String accountName = AccountManager.KEY_ACCOUNT_NAME;
-        final String sheetName = "Ausgaben";
+        final String sheetName = "Expenses";
         float temp_float_number=0.0f;
         int data_counter=0;
         @Override
         protected  String doInBackground(String...params){
-            long totalSize=0;
-            System.out.println("Starting MySpreadSheetIntegration");
-            // Application code here
-
-            File p12 = new File("src/main/balanceSheet-74fe8f58993f.p12");
-            //SpreadsheetService spreadsheet= new SpreadsheetService("balanceSheet");
-            //spreadsheet.setProtocolVersion(SpreadsheetService.Versions.V3);
-            System.out.println("MySpreadSheetIntegration");
-            HttpTransport httpTransport = new NetHttpTransport();
-            JacksonFactory jsonFactory = new JacksonFactory();
-            String[] SCOPESArray = {"https://spreadsheets.google.com/feeds", "https://spreadsheets.google.com/feeds/spreadsheets/private/full", "https://docs.google.com/feeds"};
-            final List SCOPES = Arrays.asList(SCOPESArray);
-            //String scopes = "oauth2:188599119327-i69elrjun6bsd0huiak3tt0il40l8v7k@developer.gserviceaccount.com  https://www.googleapis.com/auth/plus.login";
             String scopes = "oauth2:https://www.googleapis.com/auth/userinfo.profile  https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://spreadsheets.google.com/feeds https://spreadsheets.google.com/feeds/spreadsheets/private/full https://docs.google.com/feeds";
             try {
                 String token =
@@ -166,27 +147,11 @@ public class GraphActivity extends FragmentActivity {
                                 GraphActivity.this,
                                 account_selected_by_user,
                                 scopes);
-                System.err.println("Token: " + token);
-                System.out.println("Trying to get Ausgaben spreadsheet data");
-                /**
-                 *
-                 * IMPORTANT! Make sure to share the spreadsheet with the email specified in OAuth Service Account in Google Developer Console
-                 */
-                /*
-                GoogleCredential credential = new GoogleCredential.Builder()
-                        .setTransport(httpTransport)
-                        .setJsonFactory(jsonFactory)
-                        .setServiceAccountId("188599119327-i69elrjun6bsd0huiak3tt0il40l8v7k@developer.gserviceaccount.com")
-                        .setServiceAccountScopes(SCOPES)
-                        .setServiceAccountPrivateKeyFromP12File(p12)
-                        .build();
-                        */
+                System.out.println("Token: " + token);
+
                 SpreadsheetService service = new SpreadsheetService("balanceSheet");
                 service.setProtocolVersion(SpreadsheetService.Versions.V3);
                 service.setAuthSubToken(token);
-                //service.setOAuth2Credentials(credential);
-
-                //spreadsheet.setUserCredentials("sonny.kurniawan.yap@gmail.com", "gmail_pa55");
 
                 URL metafeedUrl = new URL("https://spreadsheets.google.com/feeds/spreadsheets/private/full");
                 SpreadsheetFeed feed = service.getFeed(metafeedUrl, SpreadsheetFeed.class);
@@ -200,7 +165,7 @@ public class GraphActivity extends FragmentActivity {
                     if(spreadsheet.getTitle().getPlainText().equals(sheetName)) {
 
                         // Print the title of this spreadsheet to the screen
-                        System.err.println(spreadsheet.getTitle().getPlainText());
+                        System.out.println(spreadsheet.getTitle().getPlainText());
 
                         //Get the first worksheet in the spreadsheet which we found
                         WorksheetFeed worksheetFeed = service.getFeed(spreadsheet.getWorksheetFeedUrl(), WorksheetFeed.class);
@@ -259,11 +224,9 @@ public class GraphActivity extends FragmentActivity {
                                 }
                             });
 
-
                         }catch (URISyntaxException us_exc){
                             System.out.println("Exception");
                         }
-
 
                     }
 
@@ -294,5 +257,13 @@ public class GraphActivity extends FragmentActivity {
         }
     }
 
-
+    private void ChartSettings(){
+        chart = (LineChart) findViewById(R.id.chart);
+        chart.getAxisRight().setEnabled(false);
+        yAxis = chart.getAxisLeft();
+        yAxis.resetAxisMaxValue();
+        yAxis.resetAxisMinValue();
+        //yAxis.setValueFormatter(new LargeValueFormatter());
+        //yAxis.setAxisMinValue(3000000);
+    }
 }

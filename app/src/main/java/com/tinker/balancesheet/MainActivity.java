@@ -30,7 +30,6 @@ public class MainActivity extends Activity {
 
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
         setContentView(R.layout.activity_login);
 
         final Button button = (Button) findViewById(R.id.select_account_btn);
@@ -48,13 +47,12 @@ public class MainActivity extends Activity {
         accountManager = AccountManager.get(this);
         accounts = accountManager.getAccountsByType("com.google");
 
-        ////////////////////Prepare to select account
         gUsernameList.clear();
         for (Account account : accounts) {
             gUsernameList.add(account.name);
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose you gmail-account");
+        builder.setTitle("Choose your Google Account");
         ListView lv = new ListView(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this,android.R.layout.simple_list_item_1, android.R.id.text1,
@@ -75,6 +73,9 @@ public class MainActivity extends Activity {
         builder.setView(lv);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+                if(account_selected==null){
+                    return;
+                }
                 //Dismiss dialog and pass selected account to the Main activity
                 dialog.dismiss();
                 Intent myIntent = new Intent(MainActivity.this, GraphActivity.class);
@@ -82,11 +83,12 @@ public class MainActivity extends Activity {
                 MainActivity.this.startActivity(myIntent);
             }
         });
-
         final Dialog dialog = builder.create();
         dialog.show();
-
     }
 
+    private void GetChartName(){
+        //TODO : Get chart name from user input
+    }
 
 }

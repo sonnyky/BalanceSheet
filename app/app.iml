@@ -97,8 +97,8 @@
     <orderEntry type="library" exported="" name="gdata-maps-meta-2.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-gtt-2.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-contacts-3.0" level="project" />
-    <orderEntry type="library" exported="" name="gdata-youtube-2.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-sites-meta-2.0" level="project" />
+    <orderEntry type="library" exported="" name="gdata-youtube-2.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-identity-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-maps-2.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-analytics-2.1" level="project" />
@@ -132,15 +132,14 @@
     <orderEntry type="library" exported="" name="support-annotations-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-books-meta-1.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-sidewiki-2.0" level="project" />
-    <orderEntry type="library" exported="" name="google.api-client-1.20.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-docs-meta-3.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-spreadsheet-meta-3.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-projecthosting-meta-2.1" level="project" />
     <orderEntry type="library" exported="" name="gdata-codesearch-meta-2.0" level="project" />
     <orderEntry type="library" exported="" name="google-http-client-android-1.20.0" level="project" />
-    <orderEntry type="library" exported="" name="gdata-client-meta-1.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-projecthosting-2.1" level="project" />
+    <orderEntry type="library" exported="" name="gdata-client-meta-1.0" level="project" />
     <orderEntry type="library" exported="" name="guava-11.0.2" level="project" />
     <orderEntry type="library" exported="" name="gdata-calendar-2.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-photos-2.0" level="project" />
