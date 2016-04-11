@@ -59,9 +59,8 @@ import java.util.List;
 public class GraphActivity extends FragmentActivity {
     SectionsPagerManager mSectionsPagerAdapter;
     ViewPager mViewPager;
-    SpreadSheetIntegration spread_sheet;
     private ProgressBar spinner;
-    private static final int REQ_SIGN_IN_REQUIRED = 55664;
+    private static final int USER_PERMISSION_REQUIRED = 55664;
     LineChart chart;
     YAxis yAxis;
     XAxis xAxis;
@@ -133,16 +132,32 @@ public class GraphActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == USER_PERMISSION_REQUIRED) {
+            if (resultCode == RESULT_OK) {
+                //TODO : Add code to show spinner again here. Will need to refactor onStart
+                new SpreadSheetIntegration().execute();
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(getApplicationContext(), R.string.need_sign_in, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+
+        }
+    }
+
     private class SpreadSheetIntegration extends AsyncTask<String, Integer, String> {
         final String accountName = AccountManager.KEY_ACCOUNT_NAME;
         final String sheetName = "Expenses";
         float temp_float_number=0.0f;
         int data_counter=0;
+        String token;
         @Override
         protected  String doInBackground(String...params){
             String scopes = "oauth2:https://www.googleapis.com/auth/userinfo.profile  https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://spreadsheets.google.com/feeds https://spreadsheets.google.com/feeds/spreadsheets/private/full https://docs.google.com/feeds";
             try {
-                String token =
+                token =
                         GoogleAuthUtil.getToken(
                                 GraphActivity.this,
                                 account_selected_by_user,
@@ -160,13 +175,8 @@ public class GraphActivity extends FragmentActivity {
 
                 // Iterate through all of the spreadsheets returned
                 for (SpreadsheetEntry spreadsheet : spreadsheets) {
-
-                    //check to find a specific sheet name, if we find it, do stuff
                     if(spreadsheet.getTitle().getPlainText().equals(sheetName)) {
-
-                        // Print the title of this spreadsheet to the screen
                         System.out.println(spreadsheet.getTitle().getPlainText());
-
                         //Get the first worksheet in the spreadsheet which we found
                         WorksheetFeed worksheetFeed = service.getFeed(spreadsheet.getWorksheetFeedUrl(), WorksheetFeed.class);
                         List<WorksheetEntry> worksheets = worksheetFeed.getEntries();
@@ -186,14 +196,11 @@ public class GraphActivity extends FragmentActivity {
                                 xVals.add(String.valueOf(label_data.getCell().getValue()));
                             }
 
-
-                            // Iterate through each cell, printing its value.
                             for (CellEntry cell : cellFeed.getEntries()) {
                                 temp_float_number = (float)(cell.getCell().getDoubleValue());
                                 valsComp1.add(new Entry(temp_float_number, data_counter));
 
                                 // xVals.add(String.valueOf(data_counter));
-
                                 data_counter++;
                                 // Print the cell's address in A1 notation
                                 //System.out.print(cell.getTitle().getPlainText() + "\t");
@@ -241,7 +248,7 @@ public class GraphActivity extends FragmentActivity {
             }catch (IOException ie){
                 System.out.println("IOException");
             } catch (UserRecoverableAuthException ure){
-                startActivityForResult(ure.getIntent(), REQ_SIGN_IN_REQUIRED);
+                startActivityForResult(ure.getIntent(), USER_PERMISSION_REQUIRED);
             }catch (GoogleAuthException gae){
                 System.out.println(gae.getMessage());
             }
@@ -253,7 +260,6 @@ public class GraphActivity extends FragmentActivity {
             super.onPostExecute(aLong);
             System.out.println("Finished");
             spinner.setVisibility(View.GONE);
-
         }
     }
 
