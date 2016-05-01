@@ -27,6 +27,8 @@ public class MainActivity extends Activity {
     AccountManager accountManager;
     Account[] accounts;
     String account_selected;
+    private TargetTableParameter table_to_reference;
+    //TODO : create method to get table parameters from user;
 
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);

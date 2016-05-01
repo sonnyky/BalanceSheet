@@ -59,8 +59,10 @@ import java.util.List;
 public class GraphActivity extends FragmentActivity {
     SectionsPagerManager mSectionsPagerAdapter;
     ViewPager mViewPager;
+
     private ProgressBar spinner;
     private static final int USER_PERMISSION_REQUIRED = 55664;
+
     LineChart chart;
     YAxis yAxis;
     XAxis xAxis;
@@ -79,6 +81,7 @@ public class GraphActivity extends FragmentActivity {
         //The account present in the user's device and selected will be passed here by the MainActivity class
         account_selected_by_user = intent.getStringExtra("account_selected");
         //Button to input by voice
+        /*
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
         btnSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,11 +91,8 @@ public class GraphActivity extends FragmentActivity {
                 //btnSpeak.setBackgroundColor(0xFF5f6960);
             }
         });
-
-        //This is the spinner to indicate data loading
-        spinner = (ProgressBar)findViewById(R.id.progressBar);
-        spinner.setVisibility(View.VISIBLE);
-
+*/
+        showSpinner();
         ChartSettings();
 
         // Create the adapter that will return a fragment for each of the three
@@ -102,6 +102,11 @@ public class GraphActivity extends FragmentActivity {
         // mViewPager = (ViewPager) findViewById(R.id.pager);
         // mViewPager.setAdapter(mSectionsPagerAdapter);
 
+    }
+
+    private void showSpinner(){
+        spinner = (ProgressBar)findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -137,7 +142,7 @@ public class GraphActivity extends FragmentActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == USER_PERMISSION_REQUIRED) {
             if (resultCode == RESULT_OK) {
-                //TODO : Add code to show spinner again here. Will need to refactor onStart
+                showSpinner();
                 new SpreadSheetIntegration().execute();
             } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(getApplicationContext(), R.string.need_sign_in, Toast.LENGTH_SHORT).show();
