@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Balance Sheet</string>
-
+    <string name="app_name">Graph It</string>
     <string name="home_title_top">My Monthly Chart</string>
     <string name="action_settings">Settings</string>
     <string name="imageMic">image of mic</string>

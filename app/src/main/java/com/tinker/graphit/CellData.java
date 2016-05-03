@@ -1,4 +1,4 @@
-package com.tinker.balancesheet;
+package com.tinker.graphit;
 
 /**
  * Created by chi on 15/08/13.

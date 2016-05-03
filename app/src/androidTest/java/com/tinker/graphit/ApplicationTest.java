@@ -1,4 +1,4 @@
-package com.tinker.balancesheet;
+package com.tinker.graphit;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

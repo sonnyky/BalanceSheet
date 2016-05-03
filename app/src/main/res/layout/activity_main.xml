@@ -47,7 +47,7 @@
                 android:id="@+id/listFragment"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:name="com.tinker.balancesheet.OneFragment"
+                android:name="graphitragment"
                 android:layout_below="@+id/btnSpeak"
                 tools:layout="@layout/one_fragment" />
         -->
