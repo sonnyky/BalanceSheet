@@ -36,20 +36,18 @@ public class AccountSelector {
 
     public void buildAccountSelectorDialog(final Activity activity_reference){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity_reference);
-        builder.setTitle("Choose your Google Account");
+        builder.setTitle(R.string.main_dialog_title);
         ListView lv = new ListView(activity_reference);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (activity_reference, android.R.layout.simple_list_item_1, android.R.id.text1,
                         gUsernameList);
         lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
-                                  {
-                                      public void onItemClick(AdapterView<?> parent, View view, int position, long
-                                              id) {
-                                          Toast.makeText(activity_reference, "You selected :" + gUsernameList.get(position), Toast.LENGTH_LONG).show();
-                                          account_selected = gUsernameList.get(position);
-                                      }
-                                  }
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                  Toast.makeText(activity_reference, "You selected :" + gUsernameList.get(position), Toast.LENGTH_LONG).show();
+                  account_selected = gUsernameList.get(position);
+            }
+          }
         );
 
         builder.setView(lv);
