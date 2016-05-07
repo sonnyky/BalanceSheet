@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,58 +23,44 @@ public class AccountSelector {
     AccountManager accountManager;
     Account[] accounts;
     String account_selected;
+    public TargetTableParameter table_to_reference;
+    public static final String DEFAULT_ENTRY = "default_entry";
 
-    public void initAccountSelector(final Activity activity_reference) {
+    public ArrayList<String> initAccountSelector(final Activity activity_reference) {
         gUsernameList = new ArrayList<String>();
         accountManager = AccountManager.get(activity_reference);
         accounts = accountManager.getAccountsByType("com.google");
         gUsernameList.clear();
+        initTableParameter();
         for (Account account : accounts)
         {
             gUsernameList.add(account.name);
         }
+        return gUsernameList;
     }
 
-    public void buildAccountSelectorDialog(final Activity activity_reference){
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity_reference);
-        builder.setTitle(R.string.main_dialog_title);
-        ListView lv = new ListView(activity_reference);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (activity_reference, android.R.layout.simple_list_item_1, android.R.id.text1,
-                        gUsernameList);
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                  Toast.makeText(activity_reference, "You selected :" + gUsernameList.get(position), Toast.LENGTH_LONG).show();
-                  account_selected = gUsernameList.get(position);
-            }
-          }
-        );
-
-        builder.setView(lv);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
-                {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        if (account_selected == null) {
-                            return;
-                        }
-                        dialog.dismiss();
-                        Intent myIntent = new Intent(activity_reference, GraphActivity.class);
-                        myIntent.putExtra("account_selected", account_selected); //Optional parameters
-                        activity_reference.startActivity(myIntent);
-                    }
-                }
-        );
-        final Dialog dialog = builder.create();
-        dialog.show();
-    }
+    //TODO:create method to return Account Array, to input to GoogleAuthToken
 
     public boolean checkTableParameter(){
-        //TODO : Check that table parameter has all the necessary input to pass to Graph activity
-        return false;
+        if(table_to_reference.getUserAccount() == DEFAULT_ENTRY ||
+                table_to_reference.getAxisNumber() == DEFAULT_ENTRY ||
+                table_to_reference.getDataNumber() == DEFAULT_ENTRY){
+            Log.v("row_number", table_to_reference.getAxisNumber());
+            Log.v("data_number", table_to_reference.getDataNumber());
+            Log.v("user_account", table_to_reference.getUserAccount());
+            return false;
+        }else {
+
+            return true;
+        }
     }
-    public void GetChartName(){
-        //TODO : Get chart name from user input
+    public void initTableParameter(){
+        table_to_reference = new TargetTableParameter();
+        table_to_reference.setUrl(DEFAULT_ENTRY);
+        table_to_reference.setTableName(DEFAULT_ENTRY);
+        table_to_reference.setAxisColumnNumber(DEFAULT_ENTRY);
+        table_to_reference.setDataColumnNumber(DEFAULT_ENTRY);
+        table_to_reference.setUserAccount(DEFAULT_ENTRY);
     }
 
 }

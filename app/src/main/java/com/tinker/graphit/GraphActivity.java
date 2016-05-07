@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,7 +60,7 @@ public class GraphActivity extends FragmentActivity {
     XAxis xAxis;
     CellData[] cell_data;
 
-    String account_selected_by_user;
+    TargetTableParameter user_table_information;
 
     private ImageButton btnSpeak;
 
@@ -69,8 +70,8 @@ public class GraphActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         Intent intent = getIntent();
 
-        //The account present in the user's device and selected will be passed here by the MainActivity class
-        account_selected_by_user = intent.getStringExtra("account_selected");
+        //The table information will be passed here by the MainActivity class
+        user_table_information = intent.getParcelableExtra("account_selected");
         //Button to input by voice
         /*
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
@@ -156,7 +157,7 @@ public class GraphActivity extends FragmentActivity {
                 token =
                         GoogleAuthUtil.getToken(
                                 GraphActivity.this,
-                                account_selected_by_user,
+                                "blitzkrieg.burner@gmail.com",
                                 scopes);
                 System.out.println("Token: " + token);
 
