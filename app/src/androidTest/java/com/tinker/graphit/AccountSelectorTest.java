@@ -2,6 +2,8 @@ package com.tinker.graphit;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.ViewInteraction;
@@ -10,13 +12,18 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiSelector;
+import android.support.test.uiautomator.Until;
+import android.test.InstrumentationTestCase;
+import android.widget.TextView;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -35,14 +42,20 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 
 /**
  * Created by sonny.kurniawan on 2016/05/04.
  */
-public class AccountSelectorTest {
-
+@RunWith(AndroidJUnit4.class)
+public class AccountSelectorTest extends InstrumentationTestCase{
+    private static final String BASIC_SAMPLE_PACKAGE
+            = "com.tinker.graphit";
+    private static final int LAUNCH_TIMEOUT = 5000;
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule =
             new ActivityTestRule<>(MainActivity.class);
@@ -51,34 +64,45 @@ public class AccountSelectorTest {
 
     @Before
     public void setUp() throws Exception {
-        // Initialize UiDevice instance
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        mDevice.pressHome();
 
+        final String launcherPackage = mDevice.getLauncherPackageName();
+        assertThat(launcherPackage, notNullValue());
+        mDevice.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
+
+        Context context = InstrumentationRegistry.getContext();
+        final Intent intent = context.getPackageManager()
+                .getLaunchIntentForPackage(BASIC_SAMPLE_PACKAGE);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);    // Clear out any previous instances
+        context.startActivity(intent);
+
+        mDevice.wait(Until.hasObject(By.pkg(BASIC_SAMPLE_PACKAGE).depth(0)), LAUNCH_TIMEOUT);
     }
 
     @Test
     public void testInitAccountSelector() throws Exception {
+        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        activityTestRule.getActivity();
         onView(withId(R.id.select_account_btn)).perform(click());
-        onView(withText(R.string.main_dialog_title)).check(matches(isDisplayed()));
     }
 
     @Test
     public void testBuildAccountSelectorDialog() throws Exception {
-        //onData(allOf(is(instanceOf(Dialog.class)), is("blitzkrieg.burner@gmail.com"))).perform(click());
-        //getRootView(activityTestRule.getActivity(), "blitzkrieg.burner@gmail.com").perform(click());
-        /*
-        UiObject dialogList = mDevice
-                .findObject(new UiSelector().textStartsWith("blitzkrieg"));
-        dialogList.click();
-        */
-
-        //activityTestRule.getActivity().getWindowManager().
-        //onView(withText(R.string.test_account)).inRoot(isDialog()).check(matches(isDisplayed()));
-        //onData(allOf(is(instanceOf(String.class)), is("blitzkrieg.burner@gmail.com"))).inRoot(isDialog()).perform(click());
+        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        activityTestRule.getActivity();
+        onView(withId(R.id.select_account_btn)).perform(click());
+        onView(withText("sonny.kurniawan.yap@gmail.com")).perform(click());
     }
 
     @Test
-    public void testCheckTableParameter() throws Exception {
+    public void testCheckTableParameterIncomplete() throws Exception {
+        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        activityTestRule.getActivity();
+        onView(withId(R.id.select_account_btn)).perform(click());
+        onView(withText("sonny.kurniawan.yap@gmail.com")).perform(click());
+        onView(withId(R.id.show_chart_button)).perform(click());
+        onView(withId(R.id.select_account_btn)).check(matches(isDisplayed()));
     }
 
     @Test
@@ -86,10 +110,6 @@ public class AccountSelectorTest {
 
     }
 
-    @NonNull
-    public static ViewInteraction getRootView(@NonNull Activity activity, @NonNull String text) {
-        return onView(withText(text)).inRoot(withDecorView(not(is(activity.getWindow().getDecorView()))));
-    }
 
 
 }
