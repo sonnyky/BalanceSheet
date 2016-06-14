@@ -1,5 +1,6 @@
 package com.tinker.graphit;
 
+import android.accounts.Account;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -22,16 +23,20 @@ import java.util.ArrayList;
 public class MainActivity extends Activity {
     private AccountSelector account_selector_instance;
     private TextView selected_account_text;
-    private EditText row_number, data_column_number;
-    private String row_number_string, data_column_number_string;
-    private ArrayList<String> accounts_in_device;
-    //TODO : create method to get table parameters from user
+    private EditText data_row_number, data_column_number, axis_column_number;
+    private String tableName, sheetName, data_row_number_string, data_column_number_string, axis_column_number_string;
+    private ArrayList<Account> accounts_in_device;
+    private ArrayList<String> account_names_strings;
 
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_login);
         account_selector_instance = new AccountSelector();
+        account_names_strings = new ArrayList<String>();
         accounts_in_device = account_selector_instance.initAccountSelector(MainActivity.this);
+        for(Account one_account : accounts_in_device){
+            account_names_strings.add(one_account.name);
+        }
         final Button account_select_button = (Button) findViewById(R.id.select_account_btn);
         account_select_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +56,7 @@ public class MainActivity extends Activity {
     protected void onResume(){
         super.onResume();;
         account_selector_instance.initTableParameter();
+        resetDisplay();
     }
 
     public void buildAccountSelectorDialog(){
@@ -62,7 +68,7 @@ public class MainActivity extends Activity {
         ListView lv = (ListView ) account_selector_dialog.findViewById(R.id.custom_generic_list_view);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this, android.R.layout.simple_list_item_1, android.R.id.text1,
-                        accounts_in_device);
+                        account_names_strings);
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                       public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -75,29 +81,42 @@ public class MainActivity extends Activity {
         account_selector_dialog.show();
     }
 
+    public void resetDisplay(){
+        selected_account_text = (TextView)findViewById(R.id.selected_account);
+        selected_account_text.setText("None");
+    }
+
     public void updateDisplay(){
         selected_account_text = (TextView)findViewById(R.id.selected_account);
-        selected_account_text.setText(account_selector_instance.table_to_reference.getUserAccount());
+        selected_account_text.setText(account_selector_instance.table_to_reference.getUserAccount().name);
     }
 
     private void getUserInputOfTableInformation(){
-        row_number = (EditText) findViewById(R.id.row_number_input_field);
-        data_column_number = (EditText) findViewById(R.id.col_number_input_field);
+        data_row_number = (EditText) findViewById(R.id.data_row_number_input_field);
+        axis_column_number = (EditText) findViewById(R.id.axis_col_number_input_field);
+        data_column_number = (EditText) findViewById(R.id.data_col_number_input_field);
+        tableName = ((EditText) findViewById(R.id.table_name_input_field)).getText().toString();
 
-        if(row_number.getText().toString()==""){
-            row_number_string = account_selector_instance.DEFAULT_ENTRY;
+        if(TextUtils.isEmpty(data_row_number.getText())){
+            data_row_number_string = account_selector_instance.DEFAULT_ENTRY;
         }else{
-            row_number_string =row_number.getText().toString();
+            data_row_number_string =data_row_number.getText().toString();
         }
         if(TextUtils.isEmpty(data_column_number.getText())){
             data_column_number_string = account_selector_instance.DEFAULT_ENTRY;
         }else{
             data_column_number_string = data_column_number.getText().toString();
         }
+        if(TextUtils.isEmpty(data_column_number.getText())){
+            axis_column_number_string = account_selector_instance.DEFAULT_ENTRY;
+        }else{
+            axis_column_number_string = axis_column_number.getText().toString();
+        }
 
-        Log.v("data_column_number",data_column_number_string);
-        account_selector_instance.table_to_reference.setAxisColumnNumber(row_number_string);
+        account_selector_instance.table_to_reference.setTableName(tableName);
+        account_selector_instance.table_to_reference.setAxisColumnNumber(axis_column_number_string);
         account_selector_instance.table_to_reference.setDataColumnNumber(data_column_number_string);
+        account_selector_instance.table_to_reference.setDataRowNumber(data_row_number_string);
     }
 
     private void showChart(){
@@ -106,6 +125,7 @@ public class MainActivity extends Activity {
         if(account_selector_instance.checkTableParameter()){
             Intent myIntent = new Intent(MainActivity.this, GraphActivity.class);
             myIntent.putExtra("account_selected", account_selector_instance.table_to_reference);
+            Log.v("account", account_selector_instance.table_to_reference.getUserAccount().name);
             this.startActivity(myIntent);
         }
     }

@@ -1,5 +1,6 @@
 package com.tinker.graphit;
 
+import android.accounts.Account;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,10 +9,11 @@ import android.os.Parcelable;
  */
 public class TargetTableParameter implements Parcelable {
     private String url;
-    private String user_account;
+    private Account user_account;
     private String table_name;
     private String axis_column_number;
     private String data_column_number;
+    private String row_where_data_starts;
 
 
     @Override
@@ -32,7 +34,8 @@ public class TargetTableParameter implements Parcelable {
     // example constructor that takes a Parcel and gives you an object populated with it's values
     private TargetTableParameter(Parcel in) {
         url=in.readString();
-        user_account=in.readString();
+        user_account=in.readParcelable(Account.class.getClassLoader());
+        row_where_data_starts = in.readString();
         axis_column_number = in.readString();
         data_column_number = in.readString();
         table_name = in.readString();
@@ -45,7 +48,8 @@ public class TargetTableParameter implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(url);
-        out.writeString(user_account);
+        out.writeParcelable(user_account, flags);
+        out.writeString(row_where_data_starts);
         out.writeString(axis_column_number);
         out.writeString(data_column_number);
         out.writeString(table_name);
@@ -56,22 +60,25 @@ public class TargetTableParameter implements Parcelable {
         url = input_url;
         return url;
     }
-    public String setUserAccount(String input_user_account){
+    public Account setUserAccount(Account input_user_account){
         user_account = input_user_account;
         return user_account;
     }
 
-    public String getUserAccount(){
+    public Account getUserAccount(){
         return user_account;
     }
-    public String getTable_name(){
+    public String getTableName(){
         return table_name;
     }
-    public String getAxisNumber(){
+    public String getAxisColumnNumber(){
         return axis_column_number;
     }
-    public String getDataNumber(){
+    public String getDataColumnNumber(){
         return data_column_number;
+    }
+    public String getRowWhereDataStarts(){
+        return row_where_data_starts;
     }
 
     public String setTableName(String input_table_name){
@@ -85,6 +92,10 @@ public class TargetTableParameter implements Parcelable {
     public String setDataColumnNumber(String input_data_column_number){
         data_column_number = input_data_column_number;
         return data_column_number;
+    }
+    public String setDataRowNumber(String input_data_row_number){
+        row_where_data_starts = input_data_row_number;
+        return row_where_data_starts;
     }
 
 }

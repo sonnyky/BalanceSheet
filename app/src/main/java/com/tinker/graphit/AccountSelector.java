@@ -19,35 +19,29 @@ import java.util.ArrayList;
  * Created by sonny.kurniawan on 2016/05/03.
  */
 public class AccountSelector {
-    ArrayList<String> gUsernameList;
+    ArrayList<Account> accountsInDevice;
     AccountManager accountManager;
     Account[] accounts;
     String account_selected;
     public TargetTableParameter table_to_reference;
     public static final String DEFAULT_ENTRY = "default_entry";
 
-    public ArrayList<String> initAccountSelector(final Activity activity_reference) {
-        gUsernameList = new ArrayList<String>();
+    public ArrayList<Account> initAccountSelector(final Activity activity_reference) {
+        accountsInDevice = new ArrayList<Account>();
         accountManager = AccountManager.get(activity_reference);
         accounts = accountManager.getAccountsByType("com.google");
-        gUsernameList.clear();
+        accountsInDevice.clear();
         initTableParameter();
         for (Account account : accounts)
         {
-            gUsernameList.add(account.name);
+            accountsInDevice.add(account);
         }
-        return gUsernameList;
+        return accountsInDevice;
     }
 
-    //TODO:create method to return Account Array, to input to GoogleAuthToken
-
     public boolean checkTableParameter(){
-        if(table_to_reference.getUserAccount() == DEFAULT_ENTRY ||
-                table_to_reference.getAxisNumber() == DEFAULT_ENTRY ||
-                table_to_reference.getDataNumber() == DEFAULT_ENTRY){
-            Log.v("row_number", table_to_reference.getAxisNumber());
-            Log.v("data_number", table_to_reference.getDataNumber());
-            Log.v("user_account", table_to_reference.getUserAccount());
+        if(table_to_reference.getUserAccount()==null || table_to_reference.getAxisColumnNumber() == DEFAULT_ENTRY || table_to_reference.getDataColumnNumber() == DEFAULT_ENTRY){
+
             return false;
         }else {
 
@@ -60,7 +54,6 @@ public class AccountSelector {
         table_to_reference.setTableName(DEFAULT_ENTRY);
         table_to_reference.setAxisColumnNumber(DEFAULT_ENTRY);
         table_to_reference.setDataColumnNumber(DEFAULT_ENTRY);
-        table_to_reference.setUserAccount(DEFAULT_ENTRY);
     }
 
 }

@@ -76,7 +76,7 @@
                 android:id="@+id/input_table_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Input Table Name"
+                android:text="Table Name"
                 android:layout_below="@+id/selected_account_field_title"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
@@ -88,13 +88,13 @@
                 android:inputType="text"
                 android:layout_alignTop="@+id/input_table_name"
                 android:layout_toEndOf="@+id/input_table_name"
-                android:layout_marginLeft="40dp" />
+                android:layout_marginLeft="100dp" />
 
             <TextView
-                android:id="@+id/input_row_number_field_title"
+                android:id="@+id/input_data_row_number_field_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Input Row Number"
+                android:text="Data Row Number"
                 android:layout_below="@+id/input_table_name"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
@@ -102,27 +102,45 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/row_number_input_field"
+                android:id="@+id/data_row_number_input_field"
                 android:inputType="number"
-                android:layout_alignTop="@+id/input_row_number_field_title"
-                android:layout_marginLeft="20dp"
+                android:layout_alignTop="@+id/input_data_row_number_field_title"
+                android:layout_marginStart="20dp"
                 android:layout_alignEnd="@+id/table_name_input_field" />
 
             <TextView
-                android:id="@+id/input_col_number_field_title"
+                android:id="@+id/input_axis_col_number_field_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Input Column Number"
-                android:layout_below="@+id/input_row_number_field_title"
+                android:text="Axis Column Number"
+                android:layout_below="@+id/input_data_row_number_field_title"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
                 android:textSize="14dp" />
             <EditText
-                android:id="@+id/col_number_input_field"
+                android:id="@+id/axis_col_number_input_field"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:layout_alignTop="@+id/input_col_number_field_title"
+                android:layout_alignTop="@+id/input_axis_col_number_field_title"
+                android:layout_marginLeft="20dp"
+                android:layout_alignEnd="@+id/table_name_input_field" />
+
+            <TextView
+                android:id="@+id/input_data_col_number_field_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Data Column Number"
+                android:layout_below="@+id/input_axis_col_number_field_title"
+                android:layout_alignParentStart="true"
+                android:paddingTop="10dp"
+                android:textSize="14dp" />
+            <EditText
+                android:id="@+id/data_col_number_input_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:layout_alignTop="@+id/input_data_col_number_field_title"
                 android:layout_marginLeft="20dp"
                 android:layout_alignEnd="@+id/table_name_input_field" />
 
@@ -137,7 +155,7 @@
                 android:background="#2490fb"
                 android:textColor="#ffffff"
                 android:padding="5dp"
-                android:layout_below="@+id/col_number_input_field"
+                android:layout_below="@+id/data_col_number_input_field"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"
                 android:typeface="monospace"

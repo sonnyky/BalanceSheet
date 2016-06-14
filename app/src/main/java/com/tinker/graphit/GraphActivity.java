@@ -22,6 +22,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.LargeValueFormatter;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 
@@ -145,8 +146,6 @@ public class GraphActivity extends FragmentActivity {
     }
 
     private class SpreadSheetIntegration extends AsyncTask<String, Integer, String> {
-        final String accountName = AccountManager.KEY_ACCOUNT_NAME;
-        final String sheetName = "Expenses";
         float temp_float_number=0.0f;
         int data_counter=0;
         String token;
@@ -157,7 +156,7 @@ public class GraphActivity extends FragmentActivity {
                 token =
                         GoogleAuthUtil.getToken(
                                 GraphActivity.this,
-                                "blitzkrieg.burner@gmail.com",
+                                user_table_information.getUserAccount(),
                                 scopes);
                 System.out.println("Token: " + token);
 
@@ -172,7 +171,7 @@ public class GraphActivity extends FragmentActivity {
 
                 // Iterate through all of the spreadsheets returned
                 for (SpreadsheetEntry spreadsheet : spreadsheets) {
-                    if(spreadsheet.getTitle().getPlainText().equals(sheetName)) {
+                    if(spreadsheet.getTitle().getPlainText().equals(user_table_information.getTableName())) {
                         System.out.println(spreadsheet.getTitle().getPlainText());
                         //Get the first worksheet in the spreadsheet which we found
                         WorksheetFeed worksheetFeed = service.getFeed(spreadsheet.getWorksheetFeedUrl(), WorksheetFeed.class);
@@ -180,8 +179,11 @@ public class GraphActivity extends FragmentActivity {
                         WorksheetEntry worksheet = worksheets.get(0);
 
                         try {
-                            URL cellFeedUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=4&min-col=3&max-col=3").toURL();
-                            URL axisLabelUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=4&min-col=1&max-col=1").toURL();
+                            URL cellFeedUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=" + user_table_information.getRowWhereDataStarts() + "&min-col="+user_table_information.getDataColumnNumber()+"&max-col="+user_table_information.getDataColumnNumber()).toURL();
+                            URL axisLabelUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=" + user_table_information.getRowWhereDataStarts() + "&min-col=" + user_table_information.getAxisColumnNumber() + "&max-col=" + user_table_information.getAxisColumnNumber()).toURL();
+                            Log.v("data row number", user_table_information.getRowWhereDataStarts());
+                            Log.v("axis column number", user_table_information.getAxisColumnNumber());
+                            Log.v("data column number", user_table_information.getDataColumnNumber());
                             CellFeed cellFeed = service.getFeed(cellFeedUrl, CellFeed.class);
                             CellFeed axisLabelFeed = service.getFeed(axisLabelUrl, CellFeed.class);
 
@@ -214,6 +216,7 @@ public class GraphActivity extends FragmentActivity {
 
                             LineDataSet setComp1 = new LineDataSet(valsComp1, "Monthly");
                             setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
+                            setComp1.setDrawValues(false);
 
                             ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
                             dataSets.add(setComp1);
@@ -266,7 +269,7 @@ public class GraphActivity extends FragmentActivity {
         yAxis = chart.getAxisLeft();
         yAxis.resetAxisMaxValue();
         yAxis.resetAxisMinValue();
-        //yAxis.setValueFormatter(new LargeValueFormatter());
-        //yAxis.setAxisMinValue(3000000);
+        yAxis.setValueFormatter(new LargeValueFormatter());
+        yAxis.setAxisMinValue(3000000);
     }
 }
