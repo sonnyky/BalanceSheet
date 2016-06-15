@@ -149,6 +149,8 @@ public class GraphActivity extends FragmentActivity {
         float temp_float_number=0.0f;
         int data_counter=0;
         String token;
+        WorksheetEntry worksheet;
+
         @Override
         protected  String doInBackground(String...params){
             String scopes = "oauth2:https://www.googleapis.com/auth/userinfo.profile  https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://spreadsheets.google.com/feeds https://spreadsheets.google.com/feeds/spreadsheets/private/full https://docs.google.com/feeds";
@@ -176,7 +178,17 @@ public class GraphActivity extends FragmentActivity {
                         //Get the first worksheet in the spreadsheet which we found
                         WorksheetFeed worksheetFeed = service.getFeed(spreadsheet.getWorksheetFeedUrl(), WorksheetFeed.class);
                         List<WorksheetEntry> worksheets = worksheetFeed.getEntries();
-                        WorksheetEntry worksheet = worksheets.get(0);
+
+                        for(WorksheetEntry cur_worksheet : worksheets){
+                            if(cur_worksheet.getTitle().getPlainText().equals(user_table_information.getSheetName())){
+                                Log.v("Message", "Worksheet found");
+                                worksheet = cur_worksheet;
+                                break;
+                            }else{
+                                Log.v("Message", "Worksheet not found");
+                                return "No such sheet name, try again";
+                            }
+                        }
 
                         try {
                             URL cellFeedUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=" + user_table_information.getRowWhereDataStarts() + "&min-col="+user_table_information.getDataColumnNumber()+"&max-col="+user_table_information.getDataColumnNumber()).toURL();

@@ -91,11 +91,29 @@
                 android:layout_marginLeft="100dp" />
 
             <TextView
+                android:id="@+id/input_sheet_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sheet Name"
+                android:layout_below="@+id/input_table_name"
+                android:layout_alignParentStart="true"
+                android:paddingTop="10dp"
+                android:textSize="14dp" />
+            <EditText
+                android:id="@+id/sheet_name_input_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_alignTop="@+id/input_sheet_name"
+                android:layout_toEndOf="@+id/input_sheet_name"
+                android:layout_marginLeft="100dp" />
+
+            <TextView
                 android:id="@+id/input_data_row_number_field_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Data Row Number"
-                android:layout_below="@+id/input_table_name"
+                android:layout_below="@+id/input_sheet_name"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
                 android:textSize="14dp" />

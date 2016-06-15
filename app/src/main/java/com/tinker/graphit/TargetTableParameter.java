@@ -11,6 +11,7 @@ public class TargetTableParameter implements Parcelable {
     private String url;
     private Account user_account;
     private String table_name;
+    private String sheet_name;
     private String axis_column_number;
     private String data_column_number;
     private String row_where_data_starts;
@@ -35,10 +36,12 @@ public class TargetTableParameter implements Parcelable {
     private TargetTableParameter(Parcel in) {
         url=in.readString();
         user_account=in.readParcelable(Account.class.getClassLoader());
+        table_name = in.readString();
+        sheet_name = in.readString();
         row_where_data_starts = in.readString();
         axis_column_number = in.readString();
         data_column_number = in.readString();
-        table_name = in.readString();
+
     }
     public TargetTableParameter(){
 
@@ -49,10 +52,11 @@ public class TargetTableParameter implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(url);
         out.writeParcelable(user_account, flags);
+        out.writeString(table_name);
+        out.writeString(sheet_name);
         out.writeString(row_where_data_starts);
         out.writeString(axis_column_number);
         out.writeString(data_column_number);
-        out.writeString(table_name);
     }
 
 
@@ -71,6 +75,9 @@ public class TargetTableParameter implements Parcelable {
     public String getTableName(){
         return table_name;
     }
+    public String getSheetName(){
+        return sheet_name;
+    }
     public String getAxisColumnNumber(){
         return axis_column_number;
     }
@@ -84,6 +91,10 @@ public class TargetTableParameter implements Parcelable {
     public String setTableName(String input_table_name){
         table_name = input_table_name;
         return table_name;
+    }
+    public String setSheetName(String input_sheet_name){
+        sheet_name = input_sheet_name;
+        return sheet_name;
     }
     public String setAxisColumnNumber(String input_axis_column_number){
         axis_column_number = input_axis_column_number;

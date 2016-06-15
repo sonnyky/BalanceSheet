@@ -1,10 +1,15 @@
 package com.tinker.graphit;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -27,14 +33,37 @@ public class MainActivity extends Activity {
     private String tableName, sheetName, data_row_number_string, data_column_number_string, axis_column_number_string;
     private ArrayList<Account> accounts_in_device;
     private ArrayList<String> account_names_strings;
+    private static final int REQUEST_GET_ACCOUNT = 112;
+
 
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.activity_login);
+
+        if(android.os.Build.VERSION.SDK_INT > 22){
+            if(isGETACCOUNTSAllowed()){
+                // do your task
+
+                initialize();
+                return;
+            }else{
+                requestGET_ACCOUNTSPermission();
+            }
+
+        }else{
+            initialize();
+        }
+
+
+    }
+
+    private void initialize(){
         account_selector_instance = new AccountSelector();
         account_names_strings = new ArrayList<String>();
         accounts_in_device = account_selector_instance.initAccountSelector(MainActivity.this);
+        Log.v("account how many", Integer.toString(accounts_in_device.size()));
         for(Account one_account : accounts_in_device){
+            Log.v("account 0", one_account.name);
             account_names_strings.add(one_account.name);
         }
         final Button account_select_button = (Button) findViewById(R.id.select_account_btn);
@@ -55,8 +84,10 @@ public class MainActivity extends Activity {
 
     protected void onResume(){
         super.onResume();;
-        account_selector_instance.initTableParameter();
-        resetDisplay();
+        if(account_selector_instance != null) {
+            account_selector_instance.initTableParameter();
+            resetDisplay();
+        }
     }
 
     public void buildAccountSelectorDialog(){
@@ -66,6 +97,7 @@ public class MainActivity extends Activity {
         account_selector_dialog.setTitle(R.string.main_dialog_title);
 
         ListView lv = (ListView ) account_selector_dialog.findViewById(R.id.custom_generic_list_view);
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this, android.R.layout.simple_list_item_1, android.R.id.text1,
                         account_names_strings);
@@ -96,7 +128,7 @@ public class MainActivity extends Activity {
         axis_column_number = (EditText) findViewById(R.id.axis_col_number_input_field);
         data_column_number = (EditText) findViewById(R.id.data_col_number_input_field);
         tableName = ((EditText) findViewById(R.id.table_name_input_field)).getText().toString();
-
+        sheetName = ((EditText) findViewById(R.id.sheet_name_input_field)).getText().toString();
         if(TextUtils.isEmpty(data_row_number.getText())){
             data_row_number_string = account_selector_instance.DEFAULT_ENTRY;
         }else{
@@ -114,6 +146,7 @@ public class MainActivity extends Activity {
         }
 
         account_selector_instance.table_to_reference.setTableName(tableName);
+        account_selector_instance.table_to_reference.setSheetName(sheetName);
         account_selector_instance.table_to_reference.setAxisColumnNumber(axis_column_number_string);
         account_selector_instance.table_to_reference.setDataColumnNumber(data_column_number_string);
         account_selector_instance.table_to_reference.setDataRowNumber(data_row_number_string);
@@ -128,6 +161,53 @@ public class MainActivity extends Activity {
             Log.v("account", account_selector_instance.table_to_reference.getUserAccount().name);
             this.startActivity(myIntent);
         }
+    }
+
+    private boolean isGETACCOUNTSAllowed() {
+        //Getting the permission status
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS);
+
+        //If permission is granted returning true
+        if (result == PackageManager.PERMISSION_GRANTED)
+            return true;
+
+        //If permission is not granted returning false
+        return false;
+    }
+
+
+    //if you don't have the permission then Requesting for permission
+    private void requestGET_ACCOUNTSPermission(){
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.GET_ACCOUNTS)){
+
+
+        }
+
+        //And finally ask for the permission
+        ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.GET_ACCOUNTS},REQUEST_GET_ACCOUNT);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        //Checking the request code of our request
+        if(requestCode == REQUEST_GET_ACCOUNT){
+
+            //If permission is granted
+            if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+
+                Toast.makeText(this,"Thanks You For Permission Granted ",Toast.LENGTH_LONG).show();
+
+                initialize();
+
+            }else{
+                //Displaying another toast if permission is not granted
+                Toast.makeText(this,"Oops you just denied the permission", Toast.LENGTH_LONG).show();
+            }
+        }
+
     }
 
 }
