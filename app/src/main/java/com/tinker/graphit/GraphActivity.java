@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -73,6 +74,7 @@ public class GraphActivity extends FragmentActivity {
 
         //The table information will be passed here by the MainActivity class
         user_table_information = intent.getParcelableExtra("account_selected");
+        screenInit();
         //Button to input by voice
         /*
         btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
@@ -95,6 +97,12 @@ public class GraphActivity extends FragmentActivity {
         // mViewPager = (ViewPager) findViewById(R.id.pager);
         // mViewPager.setAdapter(mSectionsPagerAdapter);
 
+    }
+
+    private void screenInit(){
+        TextView chartScreenTitle;
+        chartScreenTitle = (TextView) findViewById(R.id.chart_screen_title);
+        chartScreenTitle.setText(user_table_information.getTableName());
     }
 
     private void showSpinner(){

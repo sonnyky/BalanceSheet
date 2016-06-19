@@ -54,7 +54,7 @@
             <TextView android:text="@string/home_title_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textDisplay"
+                android:id="@+id/chart_screen_title"
                 android:layout_marginBottom="15dp"
                 android:textSize="20dp" />
         <!--
@@ -70,7 +70,7 @@
                 android:id="@+id/chart"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_below="@+id/textDisplay"
+                android:layout_below="@+id/chart_screen_title"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 

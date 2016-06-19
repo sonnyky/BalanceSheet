@@ -21,6 +21,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.ndk.CrashlyticsNdk;
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 
 /**
@@ -38,6 +41,7 @@ public class MainActivity extends Activity {
 
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
         setContentView(R.layout.activity_login);
 
         if(android.os.Build.VERSION.SDK_INT > 22){
