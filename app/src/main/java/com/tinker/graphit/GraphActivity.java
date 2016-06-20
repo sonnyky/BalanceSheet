@@ -1,6 +1,5 @@
 package com.tinker.graphit;
 
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
@@ -23,7 +22,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.LargeValueFormatter;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 
@@ -189,11 +189,9 @@ public class GraphActivity extends FragmentActivity {
 
                         for(WorksheetEntry cur_worksheet : worksheets){
                             if(cur_worksheet.getTitle().getPlainText().equals(user_table_information.getSheetName())){
-                                Log.v("Message", "Worksheet found");
                                 worksheet = cur_worksheet;
                                 break;
                             }else{
-                                Log.v("Message", "Worksheet not found");
                                 return "No such sheet name, try again";
                             }
                         }
@@ -201,9 +199,6 @@ public class GraphActivity extends FragmentActivity {
                         try {
                             URL cellFeedUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=" + user_table_information.getRowWhereDataStarts() + "&min-col="+user_table_information.getDataColumnNumber()+"&max-col="+user_table_information.getDataColumnNumber()).toURL();
                             URL axisLabelUrl = new URI(worksheet.getCellFeedUrl().toString() + "?min-row=" + user_table_information.getRowWhereDataStarts() + "&min-col=" + user_table_information.getAxisColumnNumber() + "&max-col=" + user_table_information.getAxisColumnNumber()).toURL();
-                            Log.v("data row number", user_table_information.getRowWhereDataStarts());
-                            Log.v("axis column number", user_table_information.getAxisColumnNumber());
-                            Log.v("data column number", user_table_information.getDataColumnNumber());
                             CellFeed cellFeed = service.getFeed(cellFeedUrl, CellFeed.class);
                             CellFeed axisLabelFeed = service.getFeed(axisLabelUrl, CellFeed.class);
 
@@ -238,7 +233,7 @@ public class GraphActivity extends FragmentActivity {
                             setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
                             setComp1.setDrawValues(false);
 
-                            ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+                            ArrayList<ILineDataSet> dataSets = new ArrayList<ILineDataSet>();
                             dataSets.add(setComp1);
 
                             final LineData line_data = new LineData(xVals, dataSets);

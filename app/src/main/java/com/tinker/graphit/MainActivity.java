@@ -65,9 +65,7 @@ public class MainActivity extends Activity {
         account_selector_instance = new AccountSelector();
         account_names_strings = new ArrayList<String>();
         accounts_in_device = account_selector_instance.initAccountSelector(MainActivity.this);
-        Log.v("account how many", Integer.toString(accounts_in_device.size()));
         for(Account one_account : accounts_in_device){
-            Log.v("account 0", one_account.name);
             account_names_strings.add(one_account.name);
         }
         final Button account_select_button = (Button) findViewById(R.id.select_account_btn);
@@ -162,7 +160,6 @@ public class MainActivity extends Activity {
         if(account_selector_instance.checkTableParameter()){
             Intent myIntent = new Intent(MainActivity.this, GraphActivity.class);
             myIntent.putExtra("account_selected", account_selector_instance.table_to_reference);
-            Log.v("account", account_selector_instance.table_to_reference.getUserAccount().name);
             this.startActivity(myIntent);
         }
     }
