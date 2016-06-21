@@ -85,7 +85,7 @@
                 android:id="@+id/table_name_input_field"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:layout_alignTop="@+id/input_table_name"
                 android:layout_toEndOf="@+id/input_table_name"
                 android:layout_marginLeft="100dp" />
@@ -103,7 +103,7 @@
                 android:id="@+id/sheet_name_input_field"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="textNoSuggestions"
                 android:layout_alignTop="@+id/input_sheet_name"
                 android:layout_toEndOf="@+id/input_sheet_name"
                 android:layout_marginLeft="100dp" />
