@@ -45,6 +45,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 /*
 * Using MPAndroidChart. Home page : https://github.com/PhilJay/MPAndroidChart
@@ -155,7 +156,9 @@ public class GraphActivity extends FragmentActivity {
 
     private class SpreadSheetIntegration extends AsyncTask<String, Integer, String> {
         float temp_float_number=0.0f;
+        float min_data_value = 1000000.0f, max_data_value = 0.0f;
         int data_counter=0;
+
         String token;
         WorksheetEntry worksheet;
 
@@ -214,6 +217,16 @@ public class GraphActivity extends FragmentActivity {
                                 temp_float_number = (float)(cell.getCell().getDoubleValue());
                                 valsComp1.add(new Entry(temp_float_number, data_counter));
 
+                                if(data_counter == 0) {
+                                    min_data_value = temp_float_number;
+                                    max_data_value = temp_float_number;
+                                }
+                                if(temp_float_number < min_data_value){
+                                    min_data_value = temp_float_number;
+                                }
+                                if(temp_float_number > max_data_value){
+                                    max_data_value = temp_float_number;
+                                }
                                 // xVals.add(String.valueOf(data_counter));
                                 data_counter++;
                                 // Print the cell's address in A1 notation
@@ -241,6 +254,7 @@ public class GraphActivity extends FragmentActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    yAxis.setAxisMinValue(min_data_value);
                                     chart.setData(line_data);
                                     chart.invalidate();
                                 }
@@ -285,6 +299,5 @@ public class GraphActivity extends FragmentActivity {
         yAxis.resetAxisMaxValue();
         yAxis.resetAxisMinValue();
         yAxis.setValueFormatter(new LargeValueFormatter());
-        yAxis.setAxisMinValue(3000000);
     }
 }
