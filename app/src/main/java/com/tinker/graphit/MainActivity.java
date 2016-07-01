@@ -46,14 +46,11 @@ public class MainActivity extends Activity {
 
         if(android.os.Build.VERSION.SDK_INT > 22){
             if(isGETACCOUNTSAllowed()){
-                // do your task
-
                 initialize();
                 return;
             }else{
                 requestGET_ACCOUNTSPermission();
             }
-
         }else{
             initialize();
         }
@@ -80,6 +77,14 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 showChart();
+            }
+        });
+
+        final Button show_manual_button = (Button) findViewById(R.id.manual_button);
+        show_manual_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showManual();
             }
         });
     }
@@ -154,6 +159,10 @@ public class MainActivity extends Activity {
         account_selector_instance.table_to_reference.setDataRowNumber(data_row_number_string);
     }
 
+    private void showManual(){
+        Intent manualIntent = new Intent(MainActivity.this, WebViewActivity.class);
+        this.startActivity(manualIntent);
+    }
     private void showChart(){
 
         getUserInputOfTableInformation();
@@ -184,7 +193,6 @@ public class MainActivity extends Activity {
 
 
         }
-
         //And finally ask for the permission
         ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.GET_ACCOUNTS},REQUEST_GET_ACCOUNT);
     }
@@ -194,17 +202,10 @@ public class MainActivity extends Activity {
 
         //Checking the request code of our request
         if(requestCode == REQUEST_GET_ACCOUNT){
-
-            //If permission is granted
             if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-
                 Toast.makeText(this,"Thanks You For Permission Granted ",Toast.LENGTH_LONG).show();
-
                 initialize();
-
             }else{
-                //Displaying another toast if permission is not granted
                 Toast.makeText(this,"Oops you just denied the permission", Toast.LENGTH_LONG).show();
             }
         }

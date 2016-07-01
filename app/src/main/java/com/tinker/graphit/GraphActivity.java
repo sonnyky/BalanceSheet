@@ -255,6 +255,7 @@ public class GraphActivity extends FragmentActivity {
                                 @Override
                                 public void run() {
                                     yAxis.setAxisMinValue(min_data_value);
+                                    chart.setDescription("");
                                     chart.setData(line_data);
                                     chart.invalidate();
                                 }
@@ -295,6 +296,7 @@ public class GraphActivity extends FragmentActivity {
     private void ChartSettings(){
         chart = (LineChart) findViewById(R.id.chart);
         chart.getAxisRight().setEnabled(false);
+        chart.getLegend().setEnabled(false);
         yAxis = chart.getAxisLeft();
         yAxis.resetAxisMaxValue();
         yAxis.resetAxisMinValue();
