@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +44,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 /*
 * Using MPAndroidChart. Home page : https://github.com/PhilJay/MPAndroidChart
@@ -63,14 +61,14 @@ public class GraphActivity extends FragmentActivity {
     XAxis xAxis;
     CellData[] cell_data;
 
-    TargetTableParameter user_table_information;
+    TargetChartInfo user_table_information;
 
     private ImageButton btnSpeak;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_chart);
         Intent intent = getIntent();
 
         //The table information will be passed here by the MainActivity class

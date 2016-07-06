@@ -8,8 +8,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,23 +43,58 @@ public class MainActivity extends Activity {
     private ArrayList<Account> accounts_in_device;
     private ArrayList<String> account_names_strings;
     private static final int REQUEST_GET_ACCOUNT = 112;
+    private TargetChartInfo dummyData, anotherdummy;
+    public static final String DEFAULT_ENTRY = "default_entry";
 
+    public ChartListRecyclerAdapter recyclerAdapter;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
 
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
-        setContentView(R.layout.activity_login);
-
+        setContentView(R.layout.activity_main);
+/*
         if(android.os.Build.VERSION.SDK_INT > 22){
             if(isGETACCOUNTSAllowed()){
-                initialize();
+                //initialize();
                 return;
             }else{
                 requestGET_ACCOUNTSPermission();
             }
         }else{
-            initialize();
+            //initialize();
         }
+*/
+        ArrayList<TargetChartInfo> list = new ArrayList<>();
+        dummyData = new TargetChartInfo();
+        anotherdummy = new TargetChartInfo();
+        dummyData.setUrl(DEFAULT_ENTRY);
+        dummyData.setTableName(DEFAULT_ENTRY);
+        dummyData.setAxisColumnNumber(DEFAULT_ENTRY);
+        dummyData.setDataColumnNumber(DEFAULT_ENTRY);
+        list.add(dummyData);
+
+        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerAdapter = new ChartListRecyclerAdapter(list);
+        Log.v("ChartListRecycler", recyclerAdapter.listOfChartsToShow.get(0).getTableName());
+
+        recyclerView.setAdapter(recyclerAdapter);
+
+        ImageButton fabButton = (ImageButton) findViewById(R.id.add_chart_button);
+        fabButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dummyData.setTableName("List Item" + recyclerAdapter.getItemCount());
+                recyclerAdapter.addItem(dummyData, recyclerAdapter.getItemCount());
+                recyclerAdapter.notifyDataSetChanged();
+            }
+        });
 
 
     }
@@ -90,7 +131,14 @@ public class MainActivity extends Activity {
     }
 
     protected void onResume(){
-        super.onResume();;
+        super.onResume();
+        ((ChartListRecyclerAdapter) recyclerAdapter).setOnItemClickListener(new ChartListRecyclerAdapter
+                .MyClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Log.i("onResume", " Clicked on Item " + position);
+            }
+        });
         if(account_selector_instance != null) {
             account_selector_instance.initTableParameter();
             resetDisplay();
