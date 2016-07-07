@@ -92,7 +92,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 dummyData.setTableName("List Item" + recyclerAdapter.getItemCount());
                 recyclerAdapter.addItem(dummyData, recyclerAdapter.getItemCount());
-                recyclerAdapter.notifyDataSetChanged();
+                recyclerAdapter.notifyItemChanged(recyclerAdapter.getItemCount());
             }
         });
 
@@ -101,34 +101,34 @@ public class MainActivity extends Activity {
 
     private void initialize(){
         account_selector_instance = new AccountSelector();
-        account_names_strings = new ArrayList<String>();
-        accounts_in_device = account_selector_instance.initAccountSelector(MainActivity.this);
-        for(Account one_account : accounts_in_device){
-            account_names_strings.add(one_account.name);
-        }
-        final Button account_select_button = (Button) findViewById(R.id.select_account_btn);
-        account_select_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                buildAccountSelectorDialog();
-            }
-        });
-        final Button show_char_button = (Button) findViewById(R.id.show_chart_button);
-        show_char_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showChart();
-            }
-        });
-
-        final Button show_manual_button = (Button) findViewById(R.id.manual_button);
-        show_manual_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showManual();
-            }
-        });
+    account_names_strings = new ArrayList<String>();
+    accounts_in_device = account_selector_instance.initAccountSelector(MainActivity.this);
+    for(Account one_account : accounts_in_device){
+        account_names_strings.add(one_account.name);
     }
+    final Button account_select_button = (Button) findViewById(R.id.select_account_btn);
+    account_select_button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            buildAccountSelectorDialog();
+        }
+    });
+    final Button show_char_button = (Button) findViewById(R.id.show_chart_button);
+    show_char_button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            showChart();
+        }
+    });
+
+    final Button show_manual_button = (Button) findViewById(R.id.manual_button);
+    show_manual_button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            showManual();
+        }
+    });
+}
 
     protected void onResume(){
         super.onResume();

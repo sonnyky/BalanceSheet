@@ -48,7 +48,7 @@ public class ChartListRecyclerAdapter extends RecyclerView.Adapter<ChartListRecy
         holder.vName.setText(listOfChartsToShow.get(position).getTableName());
     }
 
-    public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         protected TextView vName;
         protected ImageButton vEditChartInfoButton;
         protected ImageButton vDeleteChartButton;
@@ -58,6 +58,15 @@ public class ChartListRecyclerAdapter extends RecyclerView.Adapter<ChartListRecy
             vEditChartInfoButton = (ImageButton)  itemView.findViewById(R.id.edit_chart_info_button);
             vDeleteChartButton = (ImageButton)  itemView.findViewById(R.id.delete_chart_button);
             itemView.setOnClickListener(this);
+            vDeleteChartButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    try {
+                        deleteItem(position);
+                    }catch (ArrayIndexOutOfBoundsException e){e.printStackTrace();}
+                }
+            });
         }
 
         @Override
