@@ -2,9 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
     android:weightSum="1"
-    android:padding="16dp"
     >
 
     <android.support.v7.widget.CardView
@@ -25,31 +23,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_android_black_48dp"
-                android:layout_alignTop="@+id/select_account_btn"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginRight="20dp"/>
 
-            <Button
+            <Spinner
+                android:id="@+id/account_selector"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/select_account_btn_icon"
-                android:text="@string/select_account_btn"
-                android:id="@+id/select_account_btn"
-                android:layout_gravity="center_horizontal"
-                android:background="#2490fb"
-                android:textColor="#ffffff"
-                android:padding="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:typeface="monospace"
-                android:textStyle="bold" />
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                android:layout_toEndOf="@+id/input_data_col_number_field_title"
+                android:layout_alignBottom="@+id/select_account_btn_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/select_account_desc"
-                android:layout_below="@+id/select_account_btn"
+                android:layout_below="@+id/account_selector"
                 android:layout_alignLeft="@+id/select_account_btn_icon"
                 android:layout_alignStart="@+id/select_account_btn_icon"
                 android:id="@+id/select_account_explanation" />
@@ -167,7 +158,7 @@
                 android:id="@+id/show_chart_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Show Chart"
+                android:text="Finish"
                 android:layout_gravity="center_horizontal"
                 android:background="#2490fb"
                 android:textColor="#ffffff"
@@ -184,33 +175,15 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@color/button_material_dark"
                 android:textColor="#ffffff"
-                android:id="@+id/manual_button"
+                android:id="@+id/show_manual_button"
                 android:padding="5dp"
                 android:typeface="monospace"
                 android:textStyle="bold"
                 android:layout_below="@+id/data_col_number_input_field"
                 android:layout_alignParentStart="true" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:clickable="true"
-                android:src="@drawable/ic_add_circle_outline_black_48dp"
-                android:id="@+id/add_chart_button"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignEnd="@+id/select_account_explanation" />
-
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/chart_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
 
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.tinker.graphit;
 
+import android.accounts.Account;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,6 +14,7 @@ public class ChartListViewHolder extends RecyclerView.ViewHolder {
     protected TextView vName;
     protected ImageButton vEditChartInfoButton;
     protected ImageButton vDeleteChartButton;
+    protected TargetChartInfo vChartInfo;
 
     public ChartListViewHolder(View v) {
         super(v);
