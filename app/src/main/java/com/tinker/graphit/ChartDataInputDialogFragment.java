@@ -24,10 +24,13 @@ public class ChartDataInputDialogFragment extends BaseDialogFragment<ChartDataIn
     private ArrayList<String> account_names_strings;
     private ArrayAdapter<String> adapter;
     private Activity reference_to_calling_activity;
+    private String caller;
+    private int position;
 
     // interface to handle the dialog click back to the Activity which called the dialog
     public interface OnDialogFragmentClickListener {
-        public void showChartClicked(ChartDataInputDialogFragment dialog, View view);
+        public void showChartClicked(ChartDataInputDialogFragment dialog, View view, String caller, int position);
+        public void editChartInfo(int position, String caller);
 
     }
     public void setReferenceToCallingActivity(Activity calling_activity){
@@ -36,8 +39,14 @@ public class ChartDataInputDialogFragment extends BaseDialogFragment<ChartDataIn
     public void setListOfAccounts(ArrayList<String> list_for_spinner){
         account_names_strings = list_for_spinner;
     }
+    public void setCallerUiName(String caller_input){
+        caller = caller_input;
+    }
+    public void setPositionNumber(int position_input){
+        position = position_input;
+    }
     // Create an instance of the Dialog with the input
-    public static ChartDataInputDialogFragment newInstance(String title, String message, ArrayList<Account> list_of_accounts, Activity calling_activity) {
+    public static ChartDataInputDialogFragment newInstance(String title, String message, ArrayList<Account> list_of_accounts, Activity calling_activity, String caller, int position) {
         ChartDataInputDialogFragment frag = new ChartDataInputDialogFragment();
         Bundle args = new Bundle();
         ArrayList<String> account_names_strings = new ArrayList<String>();
@@ -46,6 +55,8 @@ public class ChartDataInputDialogFragment extends BaseDialogFragment<ChartDataIn
         frag.setArguments(args);
         frag.setReferenceToCallingActivity(calling_activity);
         frag.setListOfAccounts(account_names_strings);
+        frag.setCallerUiName(caller);
+        frag.setPositionNumber(position);
         if(list_of_accounts.size() >0){
 
             for(Account one_account : list_of_accounts){
@@ -64,7 +75,7 @@ public class ChartDataInputDialogFragment extends BaseDialogFragment<ChartDataIn
         show_chart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivityInstance().showChartClicked(ChartDataInputDialogFragment.this, view);
+                getActivityInstance().showChartClicked(ChartDataInputDialogFragment.this, view, ChartDataInputDialogFragment.this.caller, ChartDataInputDialogFragment.this.position);
             }
         });
 

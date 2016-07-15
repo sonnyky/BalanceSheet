@@ -1,5 +1,7 @@
 package com.tinker.graphit;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +21,16 @@ public class ChartListRecyclerAdapter extends RecyclerView.Adapter<ChartListRecy
 
     public ArrayList<TargetChartInfo> listOfChartsToShow;
     private static MyClickListener myClickListener;
+    private static ChartListClickListener editChartListener;
 
+
+    public void setEditItemClickListener(ChartListClickListener chart_list_click_listener){
+        this.editChartListener = chart_list_click_listener;
+    }
+
+    public interface ChartListClickListener{
+        public void editChartItem(int position);
+    }
     @Override
     public int getItemCount() {
         return listOfChartsToShow.size();
@@ -27,8 +38,6 @@ public class ChartListRecyclerAdapter extends RecyclerView.Adapter<ChartListRecy
 
     public ChartListRecyclerAdapter(ArrayList<TargetChartInfo> myDataset) {
         listOfChartsToShow = myDataset;
-
-        Log.v("ChartListRecycler", listOfChartsToShow.get(0).getTableName());
     }
 
     public void addItem(TargetChartInfo dataObj, int index) {
@@ -67,6 +76,16 @@ public class ChartListRecyclerAdapter extends RecyclerView.Adapter<ChartListRecy
                     }catch (ArrayIndexOutOfBoundsException e){e.printStackTrace();}
                 }
             });
+
+            vEditChartInfoButton.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                int position = getAdapterPosition();
+                    try {
+                        editChartListener.editChartItem(position);
+                    }catch (ArrayIndexOutOfBoundsException e){e.printStackTrace();}
+                }
+             });
         }
 
         @Override
