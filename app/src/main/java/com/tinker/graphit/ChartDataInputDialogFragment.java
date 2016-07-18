@@ -30,7 +30,6 @@ public class ChartDataInputDialogFragment extends BaseDialogFragment<ChartDataIn
     // interface to handle the dialog click back to the Activity which called the dialog
     public interface OnDialogFragmentClickListener {
         public void showChartClicked(ChartDataInputDialogFragment dialog, View view, String caller, int position);
-        public void editChartInfo(int position, String caller);
 
     }
     public void setReferenceToCallingActivity(Activity calling_activity){
@@ -79,7 +78,6 @@ public class ChartDataInputDialogFragment extends BaseDialogFragment<ChartDataIn
             }
         });
 
-        //adapter = new ArrayAdapter<String>(reference_to_calling_activity, android.R.layout.simple_spinner_dropdown_item, android.R.id.text1, account_names_strings);
         adapter = new ArrayAdapter<String>(reference_to_calling_activity, R.layout.custom_spinner_item, android.R.id.text1, account_names_strings);
 
         account_selector.setAdapter(adapter);

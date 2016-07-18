@@ -10,6 +10,7 @@
     <string name="input_data_row_number_field_title">Data Row Number</string>
     <string name="input_axis_col_number_field_title">Axis Column Number</string>
     <string name="input_data_col_number_field_title">Data Column Number</string>
+    <string name="no_data_available">No Data</string>
 
 
 </resources>

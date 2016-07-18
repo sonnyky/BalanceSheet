@@ -22,14 +22,20 @@ public class ChartListRecyclerAdapter extends RecyclerView.Adapter<ChartListRecy
     public ArrayList<TargetChartInfo> listOfChartsToShow;
     private static MyClickListener myClickListener;
     private static ChartListClickListener editChartListener;
-
+    private static ChartListSynchronizer syncPositions;
 
     public void setEditItemClickListener(ChartListClickListener chart_list_click_listener){
         this.editChartListener = chart_list_click_listener;
     }
+    public void syncListPositions(ChartListSynchronizer syncer){
+        this.syncPositions = syncer;
+    }
 
     public interface ChartListClickListener{
         public void editChartItem(int position);
+    }
+    public interface ChartListSynchronizer{
+        public void syncDeletedPosition(int position);
     }
     @Override
     public int getItemCount() {
@@ -73,6 +79,7 @@ public class ChartListRecyclerAdapter extends RecyclerView.Adapter<ChartListRecy
                     int position = getAdapterPosition();
                     try {
                         deleteItem(position);
+                        syncPositions.syncDeletedPosition(position);
                     }catch (ArrayIndexOutOfBoundsException e){e.printStackTrace();}
                 }
             });

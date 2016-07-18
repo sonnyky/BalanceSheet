@@ -36,6 +36,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
     private ArrayList<Account> accounts_in_device;
 
     private static final String DEFAULT_CALLER = "FAB_BUTTON";
+    private static final String EDIT_LIST = "EDITING";
 
     //Temporary variable to hold the list of charts.
     private ArrayList<TargetChartInfo> current_viewed_charts;
@@ -45,6 +46,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
 
     public ChartListRecyclerAdapter recyclerAdapter;
     private RecyclerView recyclerView;
+    private TextView empty_textview;
     private LinearLayoutManager layoutManager;
     private ChartDataInputDialogFragment generalDialogFragment;
 
@@ -69,6 +71,8 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
         ArrayList<TargetChartInfo> list = new ArrayList<>();
 
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        empty_textview = (TextView) findViewById(R.id.empty_view);
+
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -83,10 +87,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
                 showInputDialogForChart(DEFAULT_CALLER, -1);
             }
         });
-
-
     }
-
 
     public void showInputDialogForChart(String caller, int position){
         generalDialogFragment =
@@ -100,13 +101,12 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
         showChart(view, caller, position);
     }
 
-    @Override
-    public void editChartInfo(int position, String caller){
-
+    public void editListItem(int position){
+        showInputDialogForChart(EDIT_LIST, position);
     }
 
-    public void editListItem(int position){
-        showInputDialogForChart(DEFAULT_CALLER, position);
+    public void rearrangeDeletedChartList(int position){
+        current_viewed_charts.remove(position);
     }
 
     private void initialize(){
@@ -117,7 +117,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
 
     protected void onResume(){
         super.onResume();
-        ((ChartListRecyclerAdapter) recyclerAdapter).setOnItemClickListener(new ChartListRecyclerAdapter
+        recyclerAdapter.setOnItemClickListener(new ChartListRecyclerAdapter
                 .MyClickListener() {
             @Override
             public void onItemClick(int position, View v) {
@@ -130,12 +130,23 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
         recyclerAdapter.setEditItemClickListener(new ChartListRecyclerAdapter.ChartListClickListener() {
             @Override
             public void editChartItem(int position) {
-                Log.i("editChartItem", " Clicked on Item " + position);
                 editListItem(position);
             }
         });
 
+        recyclerAdapter.syncListPositions(new ChartListRecyclerAdapter.ChartListSynchronizer() {
+            @Override
+            public void syncDeletedPosition(int position) {
+                rearrangeDeletedChartList(position);
+            }
+        });
 
+
+        if(current_viewed_charts.size() == 0){
+            empty_textview.setVisibility(View.VISIBLE);
+        }else{
+            empty_textview.setVisibility(View.GONE);
+        }
 
         if(account_selector_instance != null) {
             account_selector_instance.initTableParameter();
@@ -179,12 +190,12 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
     }
 
     private void modifyChartistItem(int position, TargetChartInfo new_chart_info){
-        current_viewed_charts.set(position-1, new_chart_info);
+        current_viewed_charts.set(position, new_chart_info);
     }
 
     private void showChartFromList(int position){
         Intent myIntent = new Intent(MainActivity.this, GraphActivity.class);
-        myIntent.putExtra("account_selected", current_viewed_charts.get(position-1));
+        myIntent.putExtra("account_selected", current_viewed_charts.get(position));
         this.startActivity(myIntent);
     }
 
@@ -192,7 +203,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
 
         getUserInputOfTableInformation(view);
         generalDialogFragment.dismiss();
-        if(account_selector_instance.checkTableParameter() && caller == DEFAULT_CALLER && position == -1){
+        if(account_selector_instance.checkTableParameter() && caller == DEFAULT_CALLER && position==-1){
             current_viewed_charts.add(account_selector_instance.table_to_reference);
             recyclerAdapter.addItem(account_selector_instance.table_to_reference, recyclerAdapter.getItemCount());
             recyclerAdapter.notifyItemChanged(recyclerAdapter.getItemCount());
