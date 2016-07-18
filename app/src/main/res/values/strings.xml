@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">Graph It</string>
-    <string name="home_title_top">My Monthly Chart</string>
-    <string name="main_dialog_title">Choose Your Google Account</string>
+    <string name="home_title_top">My Chart</string>
     <string name="action_settings">Settings</string>
-    <string name="imageMic">image of mic</string>
     <string name="need_sign_in">You need to give permission to use this app</string>
-    <string name="select_account_btn">Select Account</string>
-    <string name="select_account_desc">Press Select Account and input necessary information associated with your table.\n
-    \n You can see your table on the next screen.
+    <string name="select_account_desc">Choose your account and input necessary information associated with your table.
     </string>
+    <string name="input_table_name_title_text">Table Name</string>
+    <string name="input_sheet_name_title_text">Sheet Name</string>
+    <string name="input_data_row_number_field_title">Data Row Number</string>
+    <string name="input_axis_col_number_field_title">Axis Column Number</string>
+    <string name="input_data_col_number_field_title">Data Column Number</string>
+
+
 </resources>

@@ -30,7 +30,6 @@ import java.util.ArrayList;
  */
 public class MainActivity extends Activity implements ChartDataInputDialogFragment.OnDialogFragmentClickListener{
     private AccountSelector account_selector_instance;
-    private TextView selected_account_text;
     private EditText data_row_number, data_column_number, axis_column_number;
     private String tableName, sheetName, data_row_number_string, data_column_number_string, axis_column_number_string;
     private Spinner account_selector_spinner;
@@ -42,7 +41,6 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
     private ArrayList<TargetChartInfo> current_viewed_charts;
 
     private static final int REQUEST_GET_ACCOUNT = 112;
-    private TargetChartInfo dummyData;
     public static final String DEFAULT_ENTRY = "default_entry";
 
     public ChartListRecyclerAdapter recyclerAdapter;
@@ -69,22 +67,13 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
         initialize();
         current_viewed_charts = new ArrayList<>();
         ArrayList<TargetChartInfo> list = new ArrayList<>();
-        dummyData = new TargetChartInfo();
-        dummyData.setUrl(DEFAULT_ENTRY);
-        dummyData.setTableName(DEFAULT_ENTRY);
-        dummyData.setAxisColumnNumber(DEFAULT_ENTRY);
-        dummyData.setDataColumnNumber(DEFAULT_ENTRY);
-        list.add(dummyData);
 
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerAdapter = new ChartListRecyclerAdapter(list);
-        Log.v("ChartListRecycler", recyclerAdapter.listOfChartsToShow.get(0).getTableName());
-
         recyclerView.setAdapter(recyclerAdapter);
 
         ImageButton fabButton = (ImageButton) findViewById(R.id.add_chart_button);
@@ -151,12 +140,6 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
         if(account_selector_instance != null) {
             account_selector_instance.initTableParameter();
         }
-    }
-
-
-    public void updateDisplay(){
-        selected_account_text = (TextView)findViewById(R.id.selected_account);
-        selected_account_text.setText(account_selector_instance.table_to_reference.getUserAccount().name);
     }
 
     private void getUserInputOfTableInformation(View view){

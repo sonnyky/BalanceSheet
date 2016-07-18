@@ -75,11 +75,13 @@ public class ChartDataInputDialogFragment extends BaseDialogFragment<ChartDataIn
         show_chart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivityInstance().showChartClicked(ChartDataInputDialogFragment.this, view, ChartDataInputDialogFragment.this.caller, ChartDataInputDialogFragment.this.position);
+                getActivityInstance().showChartClicked(ChartDataInputDialogFragment.this, view, ChartDataInputDialogFragment.this.caller, position);
             }
         });
 
-        adapter = new ArrayAdapter<String>(reference_to_calling_activity, android.R.layout.simple_list_item_1, android.R.id.text1, account_names_strings);
+        //adapter = new ArrayAdapter<String>(reference_to_calling_activity, android.R.layout.simple_spinner_dropdown_item, android.R.id.text1, account_names_strings);
+        adapter = new ArrayAdapter<String>(reference_to_calling_activity, R.layout.custom_spinner_item, android.R.id.text1, account_names_strings);
+
         account_selector.setAdapter(adapter);
         return view;
     }

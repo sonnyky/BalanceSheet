@@ -29,12 +29,12 @@
 
             <Spinner
                 android:id="@+id/account_selector"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:drawable/btn_dropdown"
                 android:spinnerMode="dropdown"
-                android:layout_toEndOf="@+id/input_data_col_number_field_title"
-                android:layout_alignBottom="@+id/select_account_btn_icon" />
+                android:layout_below="@+id/select_account_btn_icon"
+                android:layout_alignParentEnd="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,30 +45,13 @@
                 android:layout_alignStart="@+id/select_account_btn_icon"
                 android:id="@+id/select_account_explanation" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Selected Account"
-                android:id="@+id/selected_account_field_title"
-                android:paddingTop="10dp"
-                android:textSize="14dp"
-                android:layout_below="@+id/select_account_explanation" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="None"
-                android:id="@+id/selected_account"
-                android:layout_alignTop="@+id/selected_account_field_title"
-                android:layout_toEndOf="@+id/selected_account_field_title"
-                android:layout_marginLeft="20dp"
-                android:paddingTop="10dp"
-                android:textSize="14dp" />
+
             <TextView
                 android:id="@+id/input_table_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Table Name"
-                android:layout_below="@+id/selected_account_field_title"
+                android:text="@string/input_table_name_title_text"
+                android:layout_below="@+id/select_account_explanation"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
                 android:textSize="14dp" />
@@ -85,7 +68,7 @@
                 android:id="@+id/input_sheet_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sheet Name"
+                android:text="@string/input_sheet_name_title_text"
                 android:layout_below="@+id/input_table_name"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
@@ -103,7 +86,7 @@
                 android:id="@+id/input_data_row_number_field_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Data Row Number"
+                android:text="@string/input_data_row_number_field_title"
                 android:layout_below="@+id/input_sheet_name"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
@@ -121,7 +104,7 @@
                 android:id="@+id/input_axis_col_number_field_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Axis Column Number"
+                android:text="@string/input_axis_col_number_field_title"
                 android:layout_below="@+id/input_data_row_number_field_title"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
@@ -139,7 +122,7 @@
                 android:id="@+id/input_data_col_number_field_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Data Column Number"
+                android:text="@string/input_data_col_number_field_title"
                 android:layout_below="@+id/input_axis_col_number_field_title"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
