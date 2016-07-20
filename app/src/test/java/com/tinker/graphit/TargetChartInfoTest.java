@@ -8,9 +8,9 @@ import static org.junit.Assert.*;
 /**
  * Created by sonny.kurniawan on 2016/05/03.
  */
-public class TargetTableParameterTest {
+public class TargetChartInfoTest {
 
-    private TargetTableParameter testTargetTable;
+    private TargetChartInfo testTargetTable;
     private String testURL = "http://yahoo.com";
     private String testUserAccount = "blitzkrieg.burner@gmail.com";
     private String testTableName = "Expenses";
@@ -19,7 +19,7 @@ public class TargetTableParameterTest {
 
     @Before
     public void setUp() throws Exception {
-        testTargetTable = new TargetTableParameter();
+        testTargetTable = new TargetChartInfo();
     }
 
     @Test

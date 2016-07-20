@@ -3,16 +3,7 @@ package com.tinker.graphit;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+
 import java.util.ArrayList;
 
 /**
@@ -23,7 +14,7 @@ public class AccountSelector {
     AccountManager accountManager;
     Account[] accounts;
     String account_selected;
-    public TargetTableParameter table_to_reference;
+    public TargetChartInfo table_to_reference;
     public static final String DEFAULT_ENTRY = "default_entry";
 
     public ArrayList<Account> initAccountSelector(final Activity activity_reference) {
@@ -49,7 +40,7 @@ public class AccountSelector {
         }
     }
     public void initTableParameter(){
-        table_to_reference = new TargetTableParameter();
+        table_to_reference = new TargetChartInfo();
         table_to_reference.setUrl(DEFAULT_ENTRY);
         table_to_reference.setTableName(DEFAULT_ENTRY);
         table_to_reference.setAxisColumnNumber(DEFAULT_ENTRY);

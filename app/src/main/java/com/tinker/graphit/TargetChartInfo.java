@@ -7,7 +7,7 @@ import android.os.Parcelable;
 /**
  * Created by sonny.kurniawan on 2016/05/01.
  */
-public class TargetTableParameter implements Parcelable {
+public class TargetChartInfo implements Parcelable {
     private String url;
     private Account user_account;
     private String table_name;
@@ -22,18 +22,18 @@ public class TargetTableParameter implements Parcelable {
         return 0;
     }
 
-    public static final Parcelable.Creator<TargetTableParameter> CREATOR = new Parcelable.Creator<TargetTableParameter>() {
-        public TargetTableParameter createFromParcel(Parcel in) {
-            return new TargetTableParameter(in);
+    public static final Parcelable.Creator<TargetChartInfo> CREATOR = new Parcelable.Creator<TargetChartInfo>() {
+        public TargetChartInfo createFromParcel(Parcel in) {
+            return new TargetChartInfo(in);
         }
 
-        public TargetTableParameter[] newArray(int size) {
-            return new TargetTableParameter[size];
+        public TargetChartInfo[] newArray(int size) {
+            return new TargetChartInfo[size];
         }
     };
 
     // example constructor that takes a Parcel and gives you an object populated with it's values
-    private TargetTableParameter(Parcel in) {
+    private TargetChartInfo(Parcel in) {
         url=in.readString();
         user_account=in.readParcelable(Account.class.getClassLoader());
         table_name = in.readString();
@@ -43,7 +43,7 @@ public class TargetTableParameter implements Parcelable {
         data_column_number = in.readString();
 
     }
-    public TargetTableParameter(){
+    public TargetChartInfo(){
 
     }
 

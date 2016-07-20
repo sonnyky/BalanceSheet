@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.rule.ActivityTestRule;
 
 import android.support.test.InstrumentationRegistry;
@@ -25,8 +26,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import dalvik.annotation.TestTargetClass;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
 
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
@@ -36,6 +40,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.Matchers.allOf;
@@ -81,34 +86,55 @@ public class AccountSelectorTest extends InstrumentationTestCase{
     }
 
     @Test
-    public void testInitAccountSelector() throws Exception {
+    public void testDisplayChartInfoDialogFromFloatingButton() throws Exception {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         activityTestRule.getActivity();
-        onView(withId(R.id.select_account_btn)).perform(click());
+        onView(withId(R.id.add_chart_button)).perform(click());
     }
 
     @Test
-    public void testBuildAccountSelectorDialog() throws Exception {
+    public void testChooseUserAccount() throws Exception {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         activityTestRule.getActivity();
-        onView(withId(R.id.select_account_btn)).perform(click());
-        onView(withText("sonny.kurniawan.yap@gmail.com")).perform(click());
+        onView(withId(R.id.add_chart_button)).perform(click());
+        onView(withSpinnerText("sonny.kurniawan.yap@gmail.com")).perform(click());
     }
 
     @Test
-    public void testCheckTableParameterIncomplete() throws Exception {
+    public void testCreateChartInfoAndShowGraph() throws Exception {
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         activityTestRule.getActivity();
-        onView(withId(R.id.select_account_btn)).perform(click());
-        onView(withText("sonny.kurniawan.yap@gmail.com")).perform(click());
-        onView(withId(R.id.show_chart_button)).perform(click());
-        onView(withId(R.id.select_account_btn)).check(matches(isDisplayed()));
-    }
+        onView(withId(R.id.add_chart_button)).perform(click());
+        onView(withId(R.id.table_name_input_field)).perform(typeText("Ausgaben"));
+        onView(withId(R.id.sheet_name_input_field))
+                .perform(typeText("Finance sheet"));
+        onView(withId(R.id.data_row_number_input_field))
+                .perform(ViewActions.closeSoftKeyboard())
+                .perform(typeText("2"));
 
+        onView(withId(R.id.axis_col_number_input_field))
+                .perform(ViewActions.closeSoftKeyboard())
+                .perform(typeText("1"));
+
+        onView(withId(R.id.data_col_number_input_field))
+                .perform(ViewActions.closeSoftKeyboard())
+                .perform(typeText("3"));
+
+        onView(withId(R.id.show_chart_button))
+                .perform(ViewActions.closeSoftKeyboard())
+                .perform(click());
+    }
     @Test
-    public void testGetChartName() throws Exception {
-
+    public void createChartItemAndLaunchFromHome(){
+        try {
+            testCreateChartInfoAndShowGraph();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mDevice.pressBack();
+        onView(withText("Ausgaben")).perform(click());
     }
+
 
 
 

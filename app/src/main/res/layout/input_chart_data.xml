@@ -2,21 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
     android:weightSum="1"
-    android:padding="16dp"
     >
 
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_gravity="center"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="4dp">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp">
 
@@ -25,59 +23,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_android_black_48dp"
-                android:layout_alignTop="@+id/select_account_btn"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginRight="20dp"/>
 
-            <Button
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/account_selector"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/select_account_btn_icon"
-                android:text="@string/select_account_btn"
-                android:id="@+id/select_account_btn"
-                android:layout_gravity="center_horizontal"
-                android:background="#2490fb"
-                android:textColor="#ffffff"
-                android:padding="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:typeface="monospace"
-                android:textStyle="bold" />
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown"
+                android:layout_below="@+id/select_account_btn_icon"
+                android:layout_alignParentEnd="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/select_account_desc"
-                android:layout_below="@+id/select_account_btn"
+                android:layout_below="@+id/account_selector"
                 android:layout_alignLeft="@+id/select_account_btn_icon"
                 android:layout_alignStart="@+id/select_account_btn_icon"
                 android:id="@+id/select_account_explanation" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Selected Account"
-                android:id="@+id/selected_account_field_title"
-                android:paddingTop="10dp"
-                android:textSize="14dp"
-                android:layout_below="@+id/select_account_explanation" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="None"
-                android:id="@+id/selected_account"
-                android:layout_alignTop="@+id/selected_account_field_title"
-                android:layout_toEndOf="@+id/selected_account_field_title"
-                android:layout_marginLeft="20dp"
-                android:paddingTop="10dp"
-                android:textSize="14dp" />
+
             <TextView
                 android:id="@+id/input_table_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Table Name"
-                android:layout_below="@+id/selected_account_field_title"
+                android:text="@string/input_table_name_title_text"
+                android:layout_below="@+id/select_account_explanation"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
                 android:textSize="14dp" />
@@ -94,7 +68,7 @@
                 android:id="@+id/input_sheet_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sheet Name"
+                android:text="@string/input_sheet_name_title_text"
                 android:layout_below="@+id/input_table_name"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
@@ -112,7 +86,7 @@
                 android:id="@+id/input_data_row_number_field_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Data Row Number"
+                android:text="@string/input_data_row_number_field_title"
                 android:layout_below="@+id/input_sheet_name"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
@@ -130,7 +104,7 @@
                 android:id="@+id/input_axis_col_number_field_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Axis Column Number"
+                android:text="@string/input_axis_col_number_field_title"
                 android:layout_below="@+id/input_data_row_number_field_title"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
@@ -148,7 +122,7 @@
                 android:id="@+id/input_data_col_number_field_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Data Column Number"
+                android:text="@string/input_data_col_number_field_title"
                 android:layout_below="@+id/input_axis_col_number_field_title"
                 android:layout_alignParentStart="true"
                 android:paddingTop="10dp"
@@ -167,7 +141,7 @@
                 android:id="@+id/show_chart_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Show Chart"
+                android:text="Finish"
                 android:layout_gravity="center_horizontal"
                 android:background="#2490fb"
                 android:textColor="#ffffff"
@@ -184,15 +158,15 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@color/button_material_dark"
                 android:textColor="#ffffff"
-                android:id="@+id/manual_button"
+                android:id="@+id/show_manual_button"
                 android:padding="5dp"
                 android:typeface="monospace"
                 android:textStyle="bold"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_below="@+id/data_col_number_input_field"
+                android:layout_alignParentStart="true" />
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-
 
 </LinearLayout>
