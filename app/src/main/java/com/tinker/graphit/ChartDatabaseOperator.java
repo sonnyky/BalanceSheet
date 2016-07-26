@@ -9,6 +9,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 public class ChartDatabaseOperator {
 
     private ChartDatabaseHandler chartDbHelper;
@@ -40,6 +42,7 @@ public class ChartDatabaseOperator {
         content_values.put(chartDbHelper.COLUMN_DATA_COL_NUMBER, data_col_number);
         content_values.put(chartDbHelper.COLUMN_AXIS_COL_NUMBER, axis_col_number);
         database.insert(chartDbHelper.TABLE_NAME, null, content_values);
+        Log.v("chart db", "insert record");
     }
 
     public Cursor fetchChartData(){
@@ -65,6 +68,10 @@ public class ChartDatabaseOperator {
 
     public void delete(long _id) {
         database.delete(chartDbHelper.TABLE_NAME, chartDbHelper.COLUMN_CHART_ID + "=" + _id, null);
+    }
+    public void deleteAllRecords(){
+        Log.v("chart db", "delete all records");
+        database.delete(chartDbHelper.TABLE_NAME,null,null);
     }
 
 }

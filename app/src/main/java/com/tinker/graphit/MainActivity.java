@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
 import io.fabric.sdk.android.Fabric;
+
+import java.lang.annotation.Target;
 import java.util.ArrayList;
 
 /**
@@ -65,11 +67,13 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
 
         //Create or access database
         database_operator = new ChartDatabaseOperator(this);
-        database_operator.openChartDatabase();
+            database_operator.openChartDatabase();
         chartCursor = database_operator.fetchChartData();
 
         if (chartCursor.moveToFirst()){
+
             do{
+                Log.v("chartCursor", "found chart data");
                 String data_id = chartCursor.getString(chartCursor.getColumnIndex("Data_Id"));
                 String account_name = chartCursor.getString(chartCursor.getColumnIndex("Account_Name"));
                 String chart_name = chartCursor.getString(chartCursor.getColumnIndex("Chart_Name"));
@@ -88,7 +92,10 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
                     this_chart_info.setDataColumnNumber(data_col);
                     this_chart_info.setAxisColumnNumber(axis_col);
                     list.add(this_chart_info);
-                }
+                    current_viewed_charts.add(this_chart_info);
+                }else{
+                    Log.v("account not found", account_name);
+            }
 
             }while(chartCursor.moveToNext());
         }
@@ -113,6 +120,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(layoutManager);
+        Log.v("chart list size", Integer.toString(list.size()));
         recyclerAdapter = new ChartListRecyclerAdapter(list);
         recyclerView.setAdapter(recyclerAdapter);
 
@@ -126,9 +134,14 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
     }
 
     private Account checkAccountNameExistsInDevice(String account_name){
+        Log.v("checking account found", account_name);
         for(Account this_account : accounts_in_device){
-            if(this_account.name == account_name){
+            Log.v("account found", this_account.name);
+
+            if(this_account.name.equals(account_name)){
+                Log.v("account check result", "true");
                 return this_account;
+
             }else{return null;}
         }
         return null;
@@ -160,9 +173,6 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
 
     }
 
-    private void isAccountNameMatchesAccountInDevice(String account_name_to_test){
-        //Todo:check the account name against array of accounts in device
-    }
 
     protected void onRestart(){
         super.onRestart();
@@ -170,10 +180,15 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
 
     }
 
-    protected void onStop(){
-        super.onStop();
-        //Todo:write the current_viewed_charts object to database
-
+    protected void onPause(){
+        TargetChartInfo chart_info;
+        super.onPause();
+        database_operator.deleteAllRecords();
+        for(int i=0; i<current_viewed_charts.size(); i++) {
+            Log.v("chart db","inserted" + i + " times");
+            chart_info = current_viewed_charts.get(i);
+            database_operator.insertNewChartToDatabase(chart_info.getUserAccount().name, chart_info.getTableName(), chart_info.getSheetName(), chart_info.getRowWhereDataStarts(), chart_info.getDataColumnNumber(), chart_info.getAxisColumnNumber());
+        }
     }
 
     protected void onResume(){
