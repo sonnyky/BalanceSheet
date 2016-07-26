@@ -5,6 +5,7 @@ import android.accounts.Account;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -50,10 +51,48 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
     private LinearLayoutManager layoutManager;
     private ChartDataInputDialogFragment generalDialogFragment;
 
+    private ChartDatabaseOperator database_operator;
+    private Cursor chartCursor;
+
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
         setContentView(R.layout.activity_main);
+
+        initialize();
+        current_viewed_charts = new ArrayList<>();
+        ArrayList<TargetChartInfo> list = new ArrayList<>();
+
+        //Create or access database
+        database_operator = new ChartDatabaseOperator(this);
+        database_operator.openChartDatabase();
+        chartCursor = database_operator.fetchChartData();
+
+        if (chartCursor.moveToFirst()){
+            do{
+                String data_id = chartCursor.getString(chartCursor.getColumnIndex("Data_Id"));
+                String account_name = chartCursor.getString(chartCursor.getColumnIndex("Account_Name"));
+                String chart_name = chartCursor.getString(chartCursor.getColumnIndex("Chart_Name"));
+                String sheet_name = chartCursor.getString(chartCursor.getColumnIndex("Sheet_Name"));
+                String starting_row = chartCursor.getString(chartCursor.getColumnIndex("Starting_Row_Number"));
+                String data_col = chartCursor.getString(chartCursor.getColumnIndex("Data_Col_Number"));
+                String axis_col = chartCursor.getString(chartCursor.getColumnIndex("Axis_Col_Number"));
+                
+                Account account_to_check = checkAccountNameExistsInDevice(account_name);
+                if(account_to_check != null){
+                    TargetChartInfo this_chart_info = new TargetChartInfo();
+                    this_chart_info.setUserAccount(account_to_check);
+                    this_chart_info.setTableName(chart_name);
+                    this_chart_info.setSheetName(sheet_name);
+                    this_chart_info.setDataRowNumber(starting_row);
+                    this_chart_info.setDataColumnNumber(data_col);
+                    this_chart_info.setAxisColumnNumber(axis_col);
+                    list.add(this_chart_info);
+                }
+
+            }while(chartCursor.moveToNext());
+        }
+        chartCursor.close();
 
         if(android.os.Build.VERSION.SDK_INT > 22){
             if(isGETACCOUNTSAllowed()){
@@ -66,9 +105,6 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
             //initialize();
         }
 
-        initialize();
-        current_viewed_charts = new ArrayList<>();
-        ArrayList<TargetChartInfo> list = new ArrayList<>();
 
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         empty_textview = (TextView) findViewById(R.id.empty_view);
@@ -87,6 +123,14 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
                 showInputDialogForChart(DEFAULT_CALLER, -1);
             }
         });
+    }
+
+    private Account checkAccountNameExistsInDevice(String account_name){
+        for(Account this_account : accounts_in_device){
+            if(this_account.name == account_name){
+                return this_account;
+            }else{return null;}
+        }
     }
 
     public void showInputDialogForChart(String caller, int position){
@@ -112,6 +156,22 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
     private void initialize(){
         account_selector_instance = new AccountSelector();
         accounts_in_device = account_selector_instance.initAccountSelector(this);
+
+    }
+
+    private void isAccountNameMatchesAccountInDevice(String account_name_to_test){
+        //Todo:check the account name against array of accounts in device
+    }
+
+    protected void onRestart(){
+        super.onRestart();
+        //Todo: sync database contents and current_viewed_charts
+
+    }
+
+    protected void onStop(){
+        super.onStop();
+        //Todo:write the current_viewed_charts object to database
 
     }
 
