@@ -77,7 +77,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
                 String starting_row = chartCursor.getString(chartCursor.getColumnIndex("Starting_Row_Number"));
                 String data_col = chartCursor.getString(chartCursor.getColumnIndex("Data_Col_Number"));
                 String axis_col = chartCursor.getString(chartCursor.getColumnIndex("Axis_Col_Number"));
-                
+
                 Account account_to_check = checkAccountNameExistsInDevice(account_name);
                 if(account_to_check != null){
                     TargetChartInfo this_chart_info = new TargetChartInfo();
@@ -131,6 +131,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
                 return this_account;
             }else{return null;}
         }
+        return null;
     }
 
     public void showInputDialogForChart(String caller, int position){
