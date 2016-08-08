@@ -131,6 +131,14 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
                 showInputDialogForChart(DEFAULT_CALLER, -1);
             }
         });
+
+        ImageButton helpButton = (ImageButton) findViewById(R.id.show_manual_button);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showManual();
+            }
+        });
     }
 
     private Account checkAccountNameExistsInDevice(String account_name){
