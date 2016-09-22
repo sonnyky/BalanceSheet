@@ -50,9 +50,6 @@ import java.util.List;
 * */
 
 public class GraphActivity extends FragmentActivity {
-    SectionsPagerManager mSectionsPagerAdapter;
-    ViewPager mViewPager;
-
     private ProgressBar spinner;
     private static final int USER_PERMISSION_REQUIRED = 55664;
 
@@ -63,8 +60,6 @@ public class GraphActivity extends FragmentActivity {
 
     TargetChartInfo user_table_information;
 
-    private ImageButton btnSpeak;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,28 +69,8 @@ public class GraphActivity extends FragmentActivity {
         //The table information will be passed here by the MainActivity class
         user_table_information = intent.getParcelableExtra("account_selected");
         screenInit();
-        //Button to input by voice
-        /*
-        btnSpeak = (ImageButton) findViewById(R.id.btnSpeak);
-        btnSpeak.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //btnSpeak.setBackgroundColor(0xFF908F7B);
-                Toast.makeText(getApplicationContext(), "Please input number", Toast.LENGTH_LONG).show();
-                //btnSpeak.setBackgroundColor(0xFF5f6960);
-            }
-        });
-*/
         showSpinner();
         ChartSettings();
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the app.
-        //mSectionsPagerAdapter = new SectionsPagerManager(getSupportFragmentManager());
-        // Set up the ViewPager with the sections adapter. comment out for now
-        // mViewPager = (ViewPager) findViewById(R.id.pager);
-        // mViewPager.setAdapter(mSectionsPagerAdapter);
-
     }
 
     private void screenInit(){
@@ -162,7 +137,7 @@ public class GraphActivity extends FragmentActivity {
 
         @Override
         protected  String doInBackground(String...params){
-            String scopes = "oauth2:https://www.googleapis.com/auth/userinfo.profile  https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://spreadsheets.google.com/feeds https://spreadsheets.google.com/feeds/spreadsheets/private/full https://docs.google.com/feeds";
+            String scopes = "oauth2:https://www.googleapis.com/auth/userinfo.profile  https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email https://spreadsheets.google.com/feeds https://spreadsheets.google.com/feeds/spreadsheets/private/full https://docs.google.com/feeds https://www.googleapis.com/auth/drive";
             try {
                 token =
                         GoogleAuthUtil.getToken(
@@ -275,8 +250,13 @@ public class GraphActivity extends FragmentActivity {
 
             }catch (IOException ie){
                 System.out.println("IOException");
-            } catch (UserRecoverableAuthException ure){
-                startActivityForResult(ure.getIntent(), USER_PERMISSION_REQUIRED);
+            } catch (final UserRecoverableAuthException ure){
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        startActivityForResult(ure.getIntent(), GraphActivity.USER_PERMISSION_REQUIRED);
+                    }
+                });
+                //startActivityForResult(ure.getIntent(), USER_PERMISSION_REQUIRED);
             }catch (GoogleAuthException gae){
                 System.out.println(gae.getMessage());
             }
