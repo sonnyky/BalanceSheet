@@ -5,6 +5,7 @@
     <string name="need_sign_in">You need to give permission to use this app</string>
     <string name="select_account_desc">Choose your account and input necessary information associated with your table.
     </string>
+    <string name="table_info_incomplete">One or more table information is missing. Please check and try again</string>
     <string name="input_table_name_title_text">Table Name</string>
     <string name="input_sheet_name_title_text">Sheet Name</string>
     <string name="input_data_row_number_field_title">Data Row Number</string>

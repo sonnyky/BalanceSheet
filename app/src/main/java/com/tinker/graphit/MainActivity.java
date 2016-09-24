@@ -237,7 +237,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
         }
     }
 
-    private void getUserInputOfTableInformation(View view){
+    private boolean getUserInputOfTableInformation(View view){
 
         account_selector_spinner = (Spinner) view.findViewById(R.id.account_selector);
         data_row_number = (EditText) view.findViewById(R.id.data_row_number_input_field);
@@ -247,16 +247,19 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
         sheetName = ((EditText) view.findViewById(R.id.sheet_name_input_field)).getText().toString();
         if(TextUtils.isEmpty(data_row_number.getText())){
             data_row_number_string = account_selector_instance.DEFAULT_ENTRY;
+            return false;
         }else{
             data_row_number_string =data_row_number.getText().toString();
         }
         if(TextUtils.isEmpty(data_column_number.getText())){
             data_column_number_string = account_selector_instance.DEFAULT_ENTRY;
+            return false;
         }else{
             data_column_number_string = data_column_number.getText().toString();
         }
         if(TextUtils.isEmpty(data_column_number.getText())){
             axis_column_number_string = account_selector_instance.DEFAULT_ENTRY;
+            return false;
         }else{
             axis_column_number_string = axis_column_number.getText().toString();
         }
@@ -266,6 +269,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
         account_selector_instance.table_to_reference.setAxisColumnNumber(axis_column_number_string);
         account_selector_instance.table_to_reference.setDataColumnNumber(data_column_number_string);
         account_selector_instance.table_to_reference.setDataRowNumber(data_row_number_string);
+        return true;
     }
 
     private void showManual(){
@@ -285,7 +289,13 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
 
     private void showChart(View view, String caller, int position){
 
-        getUserInputOfTableInformation(view);
+        if(!getUserInputOfTableInformation(view)){
+            Toast.makeText(this,R.string.table_info_incomplete,Toast.LENGTH_LONG).show();
+            generalDialogFragment.dismiss();
+            return;
+        }
+
+
         generalDialogFragment.dismiss();
         if(account_selector_instance.checkTableParameter() && caller == DEFAULT_CALLER && position==-1){
             current_viewed_charts.add(account_selector_instance.table_to_reference);

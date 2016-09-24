@@ -105,7 +105,6 @@ public class GraphActivity extends FragmentActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -251,12 +250,7 @@ public class GraphActivity extends FragmentActivity {
             }catch (IOException ie){
                 System.out.println("IOException");
             } catch (final UserRecoverableAuthException ure){
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        startActivityForResult(ure.getIntent(), GraphActivity.USER_PERMISSION_REQUIRED);
-                    }
-                });
-                //startActivityForResult(ure.getIntent(), USER_PERMISSION_REQUIRED);
+                startActivityForResult(ure.getIntent(), USER_PERMISSION_REQUIRED);
             }catch (GoogleAuthException gae){
                 System.out.println(gae.getMessage());
             }
