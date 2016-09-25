@@ -199,19 +199,7 @@ public class GraphActivity extends FragmentActivity {
                                 if(temp_float_number > max_data_value){
                                     max_data_value = temp_float_number;
                                 }
-                                // xVals.add(String.valueOf(data_counter));
                                 data_counter++;
-                                // Print the cell's address in A1 notation
-                                //System.out.print(cell.getTitle().getPlainText() + "\t");
-                                // Print the cell's address in R1C1 notation
-                                //System.out.print(cell.getId().substring(cell.getId().lastIndexOf('/') + 1) + "\t");
-                                // Print the cell's formula or text value
-                                //System.out.print(cell.getCell().getInputValue() + "\t");
-                                // Print the cell's calculated value if the cell's value is numeric
-                                // Prints empty string if cell's value is not numeric
-                                //System.out.print(cell.getCell().getNumericValue() + "\t");
-                                // Print the cell's displayed value (useful if the cell has a formula)
-                                //System.out.println(cell.getCell().getValue() + "\t");
                             }
 
                             LineDataSet setComp1 = new LineDataSet(valsComp1, "Monthly");
@@ -274,4 +262,10 @@ public class GraphActivity extends FragmentActivity {
         yAxis.resetAxisMinValue();
         yAxis.setValueFormatter(new LargeValueFormatter());
     }
+
+    private void displayDataInLineChart(LineChart chart_area){
+
+        //TODO: Separate chart display from AsyncTask
+    }
+
 }
