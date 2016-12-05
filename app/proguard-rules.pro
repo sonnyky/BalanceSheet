@@ -15,3 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn com.github.mikephil.**
+-dontwarn com.google.**
+-dontwarn com.sun.**
+-dontwarn javax.mail.**
