@@ -33,6 +33,19 @@
         android:layout_alignParentBottom="true"
         />
 
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:src="@drawable/ic_priority_high_black_48dp"
+        android:id="@+id/show_privacy_policy_button"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerVertical="false"
+        android:layout_centerInParent="false"
+        android:layout_centerHorizontal="true" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"

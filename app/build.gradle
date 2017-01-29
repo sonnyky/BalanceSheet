@@ -17,7 +17,7 @@ android {
         applicationId "com.tinker.graphit"
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 3
+        versionCode 4
         versionName "1.0"
         setProperty("archivesBaseName", "Tinker-GraphIt-$versionName")
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'

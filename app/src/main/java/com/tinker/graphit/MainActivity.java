@@ -139,6 +139,14 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
                 showManual();
             }
         });
+
+        ImageButton privacypolicyButton = (ImageButton) findViewById(R.id.show_privacy_policy_button);
+        privacypolicyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPrivacyPolicy();
+            }
+        });
     }
 
     private Account checkAccountNameExistsInDevice(String account_name){
@@ -274,6 +282,12 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
 
     private void showManual(){
         Intent manualIntent = new Intent(MainActivity.this, WebViewActivity.class);
+        manualIntent.putExtra("url", "https://ancient-harbor-5436.herokuapp.com/howto_graphit");
+        this.startActivity(manualIntent);
+    }
+    private void showPrivacyPolicy(){
+        Intent manualIntent = new Intent(MainActivity.this, WebViewActivity.class);
+        manualIntent.putExtra("url", "https://ancient-harbor-5436.herokuapp.com/app_privacy_policy");
         this.startActivity(manualIntent);
     }
 
