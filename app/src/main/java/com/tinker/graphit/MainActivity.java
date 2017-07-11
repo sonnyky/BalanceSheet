@@ -114,7 +114,7 @@ public class MainActivity extends Activity implements ChartDataInputDialogFragme
 
 
         recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        empty_textview = (TextView) findVie wById(R.id.empty_view);
+        empty_textview = (TextView) findViewById(R.id.empty_view);
 
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
